@@ -25,8 +25,8 @@ import me.zhengjie.modules.system.domain.vo.MenuMetaVo;
 import me.zhengjie.modules.system.domain.vo.MenuVo;
 import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.exception.EntityExistException;
-import me.zhengjie.modules.system.repository.MenuRepository;
-import me.zhengjie.modules.system.repository.UserRepository;
+import me.zhengjie.modules.system.dao.repository.MenuRepository;
+import me.zhengjie.modules.system.dao.repository.UserRepository;
 import me.zhengjie.modules.system.service.MenuService;
 import me.zhengjie.modules.system.service.RoleService;
 import me.zhengjie.modules.system.service.dto.MenuDto;
@@ -64,7 +64,7 @@ public class MenuServiceImpl implements MenuService {
     private static final String YES_STR = "是";
     private static final String NO_STR = "否";
     private static final String BAD_REQUEST = "外链必须以http://或者https://开头";
-    
+
     @Override
     public List<MenuDto> queryAll(MenuQueryCriteria criteria, Boolean isQuery) throws Exception {
         Sort sort = Sort.by(Sort.Direction.ASC, "menuSort");

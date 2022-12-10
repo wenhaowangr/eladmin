@@ -23,7 +23,7 @@ import me.zhengjie.modules.security.service.UserCacheManager;
 import me.zhengjie.modules.system.domain.User;
 import me.zhengjie.exception.EntityExistException;
 import me.zhengjie.exception.EntityNotFoundException;
-import me.zhengjie.modules.system.repository.UserRepository;
+import me.zhengjie.modules.system.dao.repository.UserRepository;
 import me.zhengjie.modules.system.service.UserService;
 import me.zhengjie.modules.system.service.dto.*;
 import me.zhengjie.modules.system.service.mapstruct.UserLoginMapper;

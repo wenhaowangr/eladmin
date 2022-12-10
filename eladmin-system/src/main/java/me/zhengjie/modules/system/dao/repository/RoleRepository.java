@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package me.zhengjie.modules.system.repository;
+package me.zhengjie.modules.system.dao.repository;
 
 import me.zhengjie.modules.system.domain.Role;
 import org.springframework.data.jpa.repository.JpaRepository;

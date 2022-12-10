@@ -21,7 +21,9 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.config.RsaProperties;
+import me.zhengjie.modules.system.dao.mapper.UserTestMapper;
 import me.zhengjie.modules.system.domain.Dept;
+import me.zhengjie.modules.system.domain.entity.UserTestDO;
 import me.zhengjie.modules.system.service.DataService;
 import me.zhengjie.modules.system.domain.User;
 import me.zhengjie.exception.BadRequestException;
@@ -45,6 +47,8 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
@@ -66,6 +70,9 @@ public class UserController {
     private final DeptService deptService;
     private final RoleService roleService;
     private final VerifyService verificationCodeService;
+
+    @Resource
+    UserTestMapper userTestMapper;
 
     @ApiOperation("导出用户数据")
     @GetMapping(value = "/download")
@@ -185,6 +192,13 @@ public class UserController {
         verificationCodeService.validated(CodeEnum.EMAIL_RESET_EMAIL_CODE.getKey() + user.getEmail(), code);
         userService.updateEmail(userDto.getUsername(),user.getEmail());
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @ApiOperation("查询测试")
+    @GetMapping(value = "/findAll")
+    public ResponseEntity<Object> getUserInfo(){
+        List<UserTestDO> user = userTestMapper.findAllUsers();
+        return new ResponseEntity<>(user,HttpStatus.OK);
     }
 
     /**

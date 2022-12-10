@@ -33,6 +33,10 @@ spring:
     #连接超时时间
     timeout: 5000
 
+#配置mybatis
+mybatis:
+  mapperLocations: classpath:mapper/*.xml
+
 task:
   pool:
     # 核心线程池大小

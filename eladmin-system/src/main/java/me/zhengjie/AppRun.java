@@ -18,6 +18,7 @@ package me.zhengjie;
 import io.swagger.annotations.Api;
 import me.zhengjie.annotation.rest.AnonymousGetMapping;
 import me.zhengjie.utils.SpringContextHolder;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.ApplicationPidFileWriter;
@@ -40,6 +41,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(hidden = true)
 @SpringBootApplication
 @EnableTransactionManagement
+@MapperScan("me.zhengjie.modules.system.dao")
 @EnableJpaAuditing(auditorAwareRef = "auditorAware")
 public class AppRun {
 

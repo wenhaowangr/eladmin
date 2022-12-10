@@ -13,24 +13,31 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package me.zhengjie.modules.system.repository;
+package me.zhengjie.modules.system.dao.repository;
 
-import me.zhengjie.modules.system.domain.DictDetail;
+import me.zhengjie.modules.system.domain.Dict;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.util.List;
+import java.util.Set;
 
 /**
 * @author Zheng Jie
 * @date 2019-04-10
 */
-public interface DictDetailRepository extends JpaRepository<DictDetail, Long>, JpaSpecificationExecutor<DictDetail> {
+public interface DictRepository extends JpaRepository<Dict, Long>, JpaSpecificationExecutor<Dict> {
 
     /**
-     * 根据字典名称查询
-     * @param name /
+     * 删除
+     * @param ids /
+     */
+    void deleteByIdIn(Set<Long> ids);
+
+    /**
+     * 查询
+     * @param ids /
      * @return /
      */
-    List<DictDetail> findByDictName(String name);
+    List<Dict> findByIdIn(Set<Long> ids);
 }
