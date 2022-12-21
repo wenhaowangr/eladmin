@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="me.zhengjie.modules.system.dao.mapper.BusinessLineMapper">
+
+<!--    <resultMap id="usersMap" type="me.zhengjie.modules.system.domain.entity.UserTestDO">-->
+<!--        <id column="id" property="id" jdbcType="INTEGER"/>-->
+<!--        <result column="name" property="name" jdbcType="VARCHAR"/>-->
+<!--        <result column="age" property="age" jdbcType="INTEGER"/>-->
+<!--    </resultMap>-->
+
+
+    <insert id="insertBusinessLine" useGeneratedKeys="true"
+        keyProperty="id" parameterType="me.zhengjie.modules.system.domain.entity.BusinessLineDO">
+        INSERT INTO tbl_sms_businessline_info (name, manager_id, member_ids, context, milestone, rec_crt_ts, rec_upd_ts)
+        VALUES (#{name}, #{manager_id}, #{member_ids}, #{context}, #{milestone}, current_timestamp , current_timestamp)
+    </insert>
+
+    <select id="findByBusinessLineName" resultType="me.zhengjie.modules.system.domain.entity.BusinessLineDO">
+        SELECT * FROM tbl_sms_businessline_info WHERE name = #{name} AND state = 0
+    </select>
+
+
+    <select id="findByBusinessLineId" resultType="me.zhengjie.modules.system.domain.entity.BusinessLineDO">
+        SELECT * FROM tbl_sms_businessline_info WHERE id = #{id}
+    </select>
+
+    <update id="deleteBusinessLine">
+        UPDATE tbl_sms_businessline_info SET state =1 WHERE id = #{id} AND state = 0
+    </update>
+
+</mapper>
