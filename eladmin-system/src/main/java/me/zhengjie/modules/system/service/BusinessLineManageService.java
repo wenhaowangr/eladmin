@@ -9,7 +9,7 @@ public interface BusinessLineManageService {
 
     int add(BusinessLineDO businessLineDO);
 
-    int delete(long id);
+    int delete(int id);
 
     List<BusinessLineDO> findAllBusinessLines();
 

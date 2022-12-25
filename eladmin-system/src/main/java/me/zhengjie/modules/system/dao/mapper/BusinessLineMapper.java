@@ -11,9 +11,9 @@ public interface BusinessLineMapper {
 
     Integer insertBusinessLine(BusinessLineDO businessLineDO);
 
-    BusinessLineDO findByBusinessLineId(Long id);
+    BusinessLineDO findByBusinessLineId(int id);
 
-    Integer deleteBusinessLine(Long id);
+    Integer deleteBusinessLine(int id);
 
 //    BusinessLineDO findBusinessLineById(@Param("id") int id);
 //

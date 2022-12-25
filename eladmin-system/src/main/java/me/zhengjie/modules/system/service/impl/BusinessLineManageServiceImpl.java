@@ -30,7 +30,7 @@ public class BusinessLineManageServiceImpl implements BusinessLineManageService 
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public int delete(long id) {
+    public int delete(int id) {
         if (businessLineMapper.findByBusinessLineId(id) == null){
             throw new EntityNotFoundException(User.class, "BusinessLineId", String.valueOf(id));
         }
