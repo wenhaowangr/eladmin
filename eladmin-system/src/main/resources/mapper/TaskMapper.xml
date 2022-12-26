@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="me.zhengjie.modules.system.dao.mapper.TaskMapper">
+
+    <resultMap id="taskMap" type="me.zhengjie.modules.system.domain.entity.TaskDO">
+        <result property="businessLineId" column="businessLine_id"/>
+        <result property="requirementId" column="requirement_id"/>
+        <result property="sprintId" column="sprint_id"/>
+        <result property="devEmployeeId" column="dev_employee_id"/>
+        <result property="dueDate" column="due_date"/>
+    </resultMap>
+
+    <insert id="insertTask" useGeneratedKeys="true"
+        keyProperty="id" parameterType="me.zhengjie.modules.system.domain.entity.TaskDO">
+        INSERT INTO tbl_sms_task_info
+            (name, businessLine_id, requirement_id, sprint_id, dev_employee_id, due_date, story, description, remark, priority, status, rec_crt_ts,rec_upd_ts)
+        VALUES (#{name}, #{businessLineId}, #{requirementId}, #{sprintId}, #{devEmployeeId}, #{dueDate}, #{story}, #{description}, #{remark},#{priority},#{status}, current_timestamp , current_timestamp)
+    </insert>
+
+
+    <select id="findByTaskName" resultMap="taskMap">
+        SELECT * FROM tbl_sms_task_info WHERE name = #{name} AND state = 0
+    </select>
+
+
+    <select id="findByTaskId" resultMap="taskMap">
+        SELECT * FROM tbl_sms_task_info WHERE id = #{id} AND state = 0
+    </select>
+
+    <update id="deleteTask">
+        UPDATE tbl_sms_task_info SET state =1 WHERE id = #{id} AND state = 0
+    </update>
+
+    <select id="queryTaskByPage" resultMap="taskMap">
+        SELECT * FROM tbl_sms_task_info
+        <where>
+            state = 0
+            <if test="name!=null and name!=''">
+                AND name like concat('%',#{name},'%')
+            </if>
+            <if test="businessLineId != null and businessLineId != '' and businessLineId!=0">
+                AND businessLine_id = #{businessLineId}
+            </if>
+            <if test="requirementId != null and requirementId != '' and requirementId!=0">
+                AND requirement_id = #{requirementId}
+            </if>
+            <if test="sprintId != null and sprintId != '' and sprintId!=0">
+                AND sprint_id = #{sprintId}
+            </if>
+            <if test="devEmployeeId != null and devEmployeeId != '' and devEmployeeId!=0">
+                AND dev_employee_id = #{devEmployeeId}
+            </if>
+        </where>
+        <if test="pageSize != null and pageNum != null">
+            limit #{offset}, #{pageSize}
+        </if>
+    </select>
+
+    <select id="queryTaskTotalCount" resultType="java.lang.Integer">
+        select
+        count(*)
+        from
+        (
+        select
+        *
+        from tbl_sms_task_info
+        <where>
+            state = 0
+            <if test="name!=null and name!=''">
+                AND name like concat('%',#{name},'%')
+            </if>
+            <if test="businessLineId != null and businessLineId != '' and businessLineId!=0">
+                AND businessLine_id = #{businessLineId}
+            </if>
+            <if test="requirementId != null and requirementId != '' and requirementId!=0">
+                AND requirement_id = #{requirementId}
+            </if>
+            <if test="sprintId != null and sprintId != '' and sprintId!=0">
+                AND sprint_id = #{sprintId}
+            </if>
+            <if test="devEmployeeId != null and devEmployeeId != '' and devEmployeeId!=0">
+                AND dev_employee_id = #{devEmployeeId}
+            </if>
+        </where>
+        ) t1
+    </select>
+
+    <select id="findAllTask" resultMap="taskMap">
+        SELECT * FROM  tbl_sms_task_info WHERE state = 0
+    </select>
+
+
+    <update id="updateTask">
+        UPDATE tbl_sms_task_info
+        SET  name= #{name},
+                businessLine_id= #{businessLineId},
+                requirement_id= #{requirementId},
+                sprint_id= #{sprintId},
+                dev_employee_id= #{devEmployeeId},
+                due_date=#{dueDate},
+                story= #{story},
+                description= #{description},
+                remark= #{remark},
+                priority= #{priority},
+                status= #{status},
+                rec_upd_ts= current_timestamp
+        WHERE id = #{id} AND state = 0
+    </update>
+
+</mapper>

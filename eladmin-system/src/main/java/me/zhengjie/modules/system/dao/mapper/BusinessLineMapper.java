@@ -1,7 +1,7 @@
 package me.zhengjie.modules.system.dao.mapper;
 
 import me.zhengjie.modules.system.domain.entity.BusinessLineDO;
-import org.apache.ibatis.annotations.Param;
+import me.zhengjie.modules.system.domain.entity.BusinessLineManageFilter;
 
 import java.util.List;
 
@@ -15,7 +15,12 @@ public interface BusinessLineMapper {
 
     Integer deleteBusinessLine(int id);
 
-//    BusinessLineDO findBusinessLineById(@Param("id") int id);
-//
-//    List<BusinessLineDO> findAllBusinessLines();
+    List<BusinessLineDO> queryBusinessLineByPage(BusinessLineManageFilter businessLineManageFilter);
+
+    Integer queryBusinessLineTotalCount(BusinessLineManageFilter businessLineManageFilter);
+
+    List<BusinessLineDO> findAllBusinessLines();
+
+    Integer updateBusinessLine(BusinessLineDO businessLineDO);
+
 }

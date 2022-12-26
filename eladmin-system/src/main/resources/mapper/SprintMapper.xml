@@ -3,11 +3,10 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="me.zhengjie.modules.system.dao.mapper.SprintMapper">
 
-<!--    <resultMap id="usersMap" type="me.zhengjie.modules.system.domain.entity.UserTestDO">-->
-<!--        <id column="id" property="id" jdbcType="INTEGER"/>-->
-<!--        <result column="name" property="name" jdbcType="VARCHAR"/>-->
-<!--        <result column="age" property="age" jdbcType="INTEGER"/>-->
-<!--    </resultMap>-->
+    <resultMap id="sprintMap" type="me.zhengjie.modules.system.domain.entity.SprintDO">
+        <result property="beginDate" column="begin_date"/>
+        <result property="endDate" column="end_date"/>
+    </resultMap>
 
 
     <insert id="insertSprint"
@@ -16,12 +15,12 @@
         VALUES (#{name}, #{beginDate}, #{endDate}, #{quarter}, current_timestamp , current_timestamp)
     </insert>
 
-    <select id="findBySprintName" resultType="me.zhengjie.modules.system.domain.entity.SprintDO">
+    <select id="findBySprintName" resultMap="sprintMap">
         SELECT * FROM tbl_sms_sprint_info WHERE name = #{name} AND state = 0
     </select>
 
 
-    <select id="findBySprintId" resultType="me.zhengjie.modules.system.domain.entity.SprintDO">
+    <select id="findBySprintId" resultMap="sprintMap">
         SELECT * FROM tbl_sms_sprint_info WHERE id = #{id}
     </select>
 
@@ -29,7 +28,7 @@
         UPDATE tbl_sms_sprint_info SET state =1 WHERE id = #{id} AND state = 0
     </update>
 
-    <select id="querySprintByPage" resultType="me.zhengjie.modules.system.domain.entity.SprintDO">
+    <select id="querySprintByPage" resultMap="sprintMap">
     SELECT * FROM tbl_sms_sprint_info
     <where>
         state = 0
@@ -79,7 +78,7 @@
                                        end_date=#{endDate},
                                        quarter=#{quarter},
                                        rec_upd_ts=current_timestamp
-        WHERE id =#{id}
+        WHERE id =#{id} AND state = 0
     </update>
 
 

@@ -42,14 +42,6 @@ import javax.annotation.Resource;
 @RequiredArgsConstructor
 public class SprintManageController {
 
-    private final PasswordEncoder passwordEncoder;
-    private final UserService userService;
-    private final DataService dataService;
-    private final DeptService deptService;
-    private final RoleService roleService;
-    private final VerifyService verificationCodeService;
-
-
     @Resource
     SprintManageService sprintManageService;
 
