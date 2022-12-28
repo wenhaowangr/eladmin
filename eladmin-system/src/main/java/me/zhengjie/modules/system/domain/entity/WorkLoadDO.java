@@ -1,9 +1,7 @@
 package me.zhengjie.modules.system.domain.entity;
 
 import lombok.Data;
-import me.zhengjie.modules.system.domain.vo.TaskVO;
-
-import java.util.Date;
+import me.zhengjie.modules.system.domain.vo.TaskDTO;
 
 @Data
 public class WorkLoadDO {
@@ -22,13 +20,13 @@ public class WorkLoadDO {
     }
 
 
-    public WorkLoadDO(TaskVO taskVO) {
-        this.taskId = taskVO.getId();
-        this.businessLineId = taskVO.getBusinessLineId();
-        this.requirementId = taskVO.getRequirementId();
-        this.sprintId = taskVO.getSprintId();
-        this.devEmployeeId = taskVO.getDevEmployeeId();
-        this.workLoad = taskVO.getWorkload();
+    public WorkLoadDO(TaskDTO taskDTO) {
+        this.taskId = taskDTO.getId();
+        this.businessLineId = taskDTO.getBusinessLineId();
+        this.requirementId = taskDTO.getRequirementId();
+        this.sprintId = taskDTO.getSprintId();
+        this.devEmployeeId = taskDTO.getDevEmployeeId();
+        this.workLoad = taskDTO.getWorkload();
     }
 
 }

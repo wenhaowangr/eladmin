@@ -11,6 +11,10 @@
         <result property="dueDate" column="due_date"/>
     </resultMap>
 
+    <resultMap id="taskVOMap" type="me.zhengjie.modules.system.domain.vo.TaskVO">
+        <result property="dueDate" column="due_date"/>
+    </resultMap>
+
     <insert id="insertTask" useGeneratedKeys="true"
         keyProperty="id" parameterType="me.zhengjie.modules.system.domain.entity.TaskDO">
         INSERT INTO tbl_sms_task_info
@@ -32,24 +36,42 @@
         UPDATE tbl_sms_task_info SET state =1 WHERE id = #{id} AND state = 0
     </update>
 
-    <select id="queryTaskByPage" resultMap="taskMap">
-        SELECT * FROM tbl_sms_task_info
+    <select id="queryTaskByPage" resultMap="taskVOMap">
+        SELECT b.name as businessLineName,
+               a.description,
+               c.name as devEmployeeName,
+               a.due_date,
+               a.id,
+               a.name,
+               a.priority,
+               a.remark,
+               d.name as requirementName,
+               e.name as sprintName,
+               a.status,
+               a.story,
+               (case when f.workload is null then 0 else f.workload end) as workload
+               FROM tbl_sms_task_info a
+        LEFT JOIN tbl_sms_businessline_info b ON a.businessLine_id = b.id
+        LEFT JOIN tbl_sms_employee_info c ON a.dev_employee_id = c.id
+        LEFT JOIN tbl_sms_requirement_info d ON a.requirement_id = d.id
+        LEFT JOIN tbl_sms_sprint_info e ON a.sprint_id = e.id
+        LEFT JOIN tbl_sms_task_workload_info f ON a.id = f.task_id
         <where>
-            state = 0
+            a.state = 0 AND b.state = 0
             <if test="name!=null and name!=''">
                 AND name like concat('%',#{name},'%')
             </if>
             <if test="businessLineId != null and businessLineId != '' and businessLineId!=0">
-                AND businessLine_id = #{businessLineId}
+                AND a.businessLine_id = #{businessLineId}
             </if>
             <if test="requirementId != null and requirementId != '' and requirementId!=0">
-                AND requirement_id = #{requirementId}
+                AND a.requirement_id = #{requirementId}
             </if>
             <if test="sprintId != null and sprintId != '' and sprintId!=0">
-                AND sprint_id = #{sprintId}
+                AND a.sprint_id = #{sprintId}
             </if>
             <if test="devEmployeeId != null and devEmployeeId != '' and devEmployeeId!=0">
-                AND dev_employee_id = #{devEmployeeId}
+                AND a.dev_employee_id = #{devEmployeeId}
             </if>
         </where>
         <if test="pageSize != null and pageNum != null">

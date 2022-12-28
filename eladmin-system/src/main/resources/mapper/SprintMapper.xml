@@ -81,5 +81,9 @@
         WHERE id =#{id} AND state = 0
     </update>
 
+    <select id="getSprintByDate" resultMap="sprintMap">
+        SELECT * FROM tbl_sms_sprint_info WHERE <![CDATA[ begin_date <= #{Date} ]]> AND <![CDATA[ end_date >= #{Date} ]]>
+    </select>
+
 
 </mapper>

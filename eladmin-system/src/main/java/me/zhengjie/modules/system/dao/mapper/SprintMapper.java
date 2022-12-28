@@ -4,6 +4,7 @@ import me.zhengjie.modules.system.domain.entity.SprintDO;
 import me.zhengjie.modules.system.domain.entity.SprintManageFilter;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 public interface SprintMapper {
@@ -21,6 +22,8 @@ public interface SprintMapper {
     Integer querySprintTotalCount(SprintManageFilter sprintManageFilter);
 
     Integer updateSprint(SprintDO sprintDO);
+
+    SprintDO getSprintByDate(Date date);
 
 //    BusinessLineDO findBusinessLineById(@Param("id") int id);
 //

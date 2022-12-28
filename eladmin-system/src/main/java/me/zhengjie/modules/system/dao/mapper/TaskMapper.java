@@ -3,6 +3,7 @@ package me.zhengjie.modules.system.dao.mapper;
 import io.swagger.models.auth.In;
 import me.zhengjie.modules.system.domain.entity.TaskDO;
 import me.zhengjie.modules.system.domain.entity.TaskFilter;
+import me.zhengjie.modules.system.domain.vo.TaskVO;
 
 import java.util.List;
 
@@ -16,7 +17,7 @@ public interface TaskMapper {
 
     List<TaskDO> findAllTask();
 
-    List<TaskDO> queryTaskByPage(TaskFilter taskFilter);
+    List<TaskVO> queryTaskByPage(TaskFilter taskFilter);
 
     Integer queryTaskTotalCount(TaskFilter taskFilter);
 

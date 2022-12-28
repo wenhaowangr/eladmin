@@ -66,20 +66,26 @@ public class SprintManageController {
     }
 
     @ApiOperation("查询冲刺")
-    @PostMapping(value = "/query")
-    public ResponseEntity<Object> querySprint(@RequestBody SprintManageFilter filter) {
+    @GetMapping(value = "/query")
+    public ResponseEntity<Object> querySprint(@ModelAttribute SprintManageFilter filter) {
         PageVO<SprintDO> sprintDOPageVO = sprintManageService.querySprintByPage(filter);
         return new ResponseEntity<>(sprintDOPageVO, HttpStatus.OK);
     }
 
     @ApiOperation("编辑冲刺")
     @PostMapping(value = "/update")
-    public ResponseEntity<Object> updateSprint(@RequestBody SprintDO sprintDO) {
+    public ResponseEntity<Object> updateSprint(@ModelAttribute SprintDO sprintDO) {
         int rowAffected = sprintManageService.update(sprintDO);
         if (rowAffected > 0) {
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ApiOperation("查询当前时间所在冲刺")
+    @GetMapping(value = "/getCurSprint")
+    public ResponseEntity<Object> getCurSprint() {
+        return new ResponseEntity<>(sprintManageService.getCurSprint(),HttpStatus.OK);
     }
 
 }

@@ -4,7 +4,7 @@ import me.zhengjie.modules.system.WorkTypeEnum;
 import me.zhengjie.modules.system.dao.mapper.SprintMapper;
 import me.zhengjie.modules.system.dao.mapper.WorkloadMapper;
 import me.zhengjie.modules.system.domain.entity.WorkLoadDO;
-import me.zhengjie.modules.system.domain.vo.TaskVO;
+import me.zhengjie.modules.system.domain.vo.TaskDTO;
 import me.zhengjie.modules.system.service.WorkloadService;
 import org.springframework.stereotype.Service;
 
@@ -20,10 +20,10 @@ public class WorkloadServiceImpl implements WorkloadService {
 
 
     @Override
-    public int addRWWorkLoad(TaskVO taskVO) {
-        WorkLoadDO workloadDO = new WorkLoadDO(taskVO);
+    public int addRWWorkLoad(TaskDTO taskDTO) {
+        WorkLoadDO workloadDO = new WorkLoadDO(taskDTO);
         workloadDO.setType(WorkTypeEnum.RW.name());
-        workloadDO.setQuarter(sprintMapper.findBySprintId(taskVO.getSprintId()).getQuarter());
+        workloadDO.setQuarter(sprintMapper.findBySprintId(taskDTO.getSprintId()).getQuarter());
         return workloadMapper.insertRW(workloadDO);
     }
 

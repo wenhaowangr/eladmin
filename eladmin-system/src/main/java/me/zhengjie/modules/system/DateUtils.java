@@ -10,7 +10,7 @@ public class DateUtils {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(endDate);
 
-        int month = calendar.get(Calendar.MONTH);
+        int month = calendar.get(Calendar.MONTH) + 1;
         int year = calendar.get(Calendar.YEAR);
 
         if (month <= 3) {

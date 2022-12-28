@@ -4,6 +4,7 @@ import me.zhengjie.modules.system.dao.mapper.TaskMapper;
 import me.zhengjie.modules.system.domain.entity.TaskDO;
 import me.zhengjie.modules.system.domain.entity.TaskFilter;
 import me.zhengjie.modules.system.domain.vo.PageVO;
+import me.zhengjie.modules.system.domain.vo.TaskVO;
 import me.zhengjie.modules.system.service.TaskManageService;
 import org.springframework.stereotype.Service;
 
@@ -17,15 +18,15 @@ public class TaskManageServiceImpl implements TaskManageService {
     TaskMapper taskMapper;
 
     @Override
-    public PageVO<TaskDO> queryTaskByPage(TaskFilter filter) {
+    public PageVO<TaskVO> queryTaskByPage(TaskFilter filter) {
 
-        List<TaskDO> taskDOList = taskMapper.queryTaskByPage(filter);
+        List<TaskVO> taskVOList = taskMapper.queryTaskByPage(filter);
 
         int pageNum = filter.getPageNum();
         int pageSize = filter.getPageSize();
         int taskTotalCount = taskMapper.queryTaskTotalCount(filter);
 
-        return new PageVO<>(pageSize, pageNum, taskTotalCount, taskDOList);
+        return new PageVO<>(pageSize, pageNum, taskTotalCount, taskVOList);
     }
 
     @Override

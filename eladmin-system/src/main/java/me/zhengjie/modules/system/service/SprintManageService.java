@@ -5,6 +5,8 @@ import me.zhengjie.modules.system.domain.entity.SprintManageFilter;
 import me.zhengjie.modules.system.domain.vo.PageVO;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
+
 
 public interface SprintManageService {
 
@@ -12,4 +14,7 @@ public interface SprintManageService {
     int delete(int id);
     PageVO<SprintDO> querySprintByPage(SprintManageFilter sprintManageFilter);
     int update(SprintDO sprintDO);
+
+    SprintDO getSprintByDate(Date date);
+    int getCurSprint();
 }

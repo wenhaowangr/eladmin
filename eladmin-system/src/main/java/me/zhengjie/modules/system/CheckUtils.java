@@ -25,4 +25,9 @@ public class CheckUtils {
         }
     }
 
+    public static <T> void checkBeginDateEarlierThanEndDate(String msg, Date beginDate, Date endDate) throws RuntimeException{
+        if (beginDate.after(endDate)) {
+            throw new RuntimeException(msg);
+        }
+    }
 }

@@ -64,8 +64,8 @@ public class BusinessLineController {
     }
 
     @ApiOperation("查询条线")
-    @PostMapping(value = "/query")
-    public ResponseEntity<Object> queryBusinessLine(@RequestBody BusinessLineManageFilter filter) {
+    @GetMapping(value = "/query")
+    public ResponseEntity<Object> queryBusinessLine(@ModelAttribute BusinessLineManageFilter filter) {
 
         CheckUtils.checkMemberIds("成员ID格式错误!", filter.getMemberIds());
         PageVO<BusinessLineDO> sprintDOPageVO = businessLineManageService.queryBusinessLineByPage(filter);
