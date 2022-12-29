@@ -3,9 +3,11 @@ package me.zhengjie.modules.system.service;
 import me.zhengjie.modules.system.domain.entity.SprintDO;
 import me.zhengjie.modules.system.domain.entity.SprintManageFilter;
 import me.zhengjie.modules.system.domain.vo.PageVO;
+import me.zhengjie.modules.system.domain.vo.SprintVO;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 
 public interface SprintManageService {
@@ -17,4 +19,6 @@ public interface SprintManageService {
 
     SprintDO getSprintByDate(Date date);
     int getCurSprint();
+
+    List<SprintVO> getSprintAndReq();
 }

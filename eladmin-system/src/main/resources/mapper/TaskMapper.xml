@@ -112,6 +112,11 @@
         SELECT * FROM  tbl_sms_task_info WHERE state = 0
     </select>
 
+    <select id="queryTaskByRequirementId" resultMap="taskMap">
+        SELECT * FROM  tbl_sms_task_info
+        WHERE state = 0 AND requirement_id = #{requirementId};
+    </select>
+
 
     <update id="updateTask">
         UPDATE tbl_sms_task_info

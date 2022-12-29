@@ -20,6 +20,7 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.poi.excel.BigExcelWriter;
 import cn.hutool.poi.excel.ExcelUtil;
 import me.zhengjie.exception.BadRequestException;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.util.IOUtils;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.slf4j.Logger;
@@ -32,9 +33,7 @@ import java.io.*;
 import java.security.MessageDigest;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * File工具类，扩展 hutool 工具包
@@ -175,6 +174,85 @@ public class FileUtil extends cn.hutool.core.io.FileUtil {
         }
         return file;
     }
+
+    public static Map<Integer, List<String>> readExcel(MultipartFile file) {
+        //存储excel所有sheet信息
+        Map<Integer, List<String>> totalList = new HashMap<>();
+        //创建工作簿
+        Workbook workbook = null;
+        try {
+//            is = new FileInputStream(file);
+//            workbook = new XSSFWorkbook(is);
+//            workbook = new XSSFWorkbook(file.getInputStream());//这是07版本的，不兼容03版本HSSFWorkbook
+            workbook = WorkbookFactory.create(file.getInputStream());//可兼容03、07版本
+            //获取sheet数量
+            int numberOfSheets = workbook.getNumberOfSheets();
+            for (int i = 0; i < numberOfSheets; i++) {
+                //获取当前工作表
+                Sheet sheet = workbook.getSheetAt(i);
+                String sheetName = sheet.getSheetName();
+                int numOfRows = sheet.getLastRowNum();
+                if (!("特定的sheet名字".equals(sheetName) || "sheet1".equals(sheetName))) {
+                    continue;
+                }
+                for (int rowNum = 0; rowNum < numOfRows; rowNum++) {
+                    List<String> infoList = new ArrayList<>();
+                    Row rowData = sheet.getRow(rowNum);
+                    if (rowData != null) {
+                        //读取列
+                        int cellCount = rowData.getLastCellNum();
+                        for (int cellNum = 0; cellNum < cellCount; cellNum++) {
+                            Cell cell = rowData.getCell(cellNum);
+                            //匹配数据类型
+                            String cellValue = "";
+                            if (cell != null) {
+                                if (cell.getCellType() == CellType.STRING) {
+                                    cellValue = cell.getStringCellValue();
+                                }
+                                if (cell.getCellType() == CellType.NUMERIC) {
+                                    //数值型
+                                    //poi读取整数会自动转化成小数，这里对整数进行还原，小数不做处理
+                                    long longValue = Math.round(cell.getNumericCellValue());
+                                    if (Double.parseDouble(longValue + ".0") == cell.getNumericCellValue()) {
+                                        cellValue = String.valueOf(longValue);
+                                    } else {
+                                        cellValue = String.valueOf(cell.getNumericCellValue());
+                                    }
+                                } else if (cell.getCellType() == CellType.FORMULA) {
+                                    //公式型
+                                    //公式计算的值不会转化成小数，这里数值获取失败后会获取字符
+                                    try {
+                                        cellValue = String.valueOf(cell.getNumericCellValue());
+                                    } catch (Exception e) {
+                                        cellValue = cell.getStringCellValue();
+                                    }
+                                }
+                                infoList.add(cellValue);
+                            } else {
+                                infoList.add(null);
+                            }
+                        }
+                    }
+                    totalList.put(rowNum, infoList);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (workbook != null) {
+                    workbook.close();
+                }
+//                if (is != null) {
+//                    is.close();
+//                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return totalList;
+    }
+
 
     /**
      * 将文件名解析成文件的上传路径

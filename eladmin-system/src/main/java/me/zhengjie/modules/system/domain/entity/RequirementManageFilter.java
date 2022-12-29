@@ -2,9 +2,11 @@ package me.zhengjie.modules.system.domain.entity;
 
 import lombok.Data;
 
-@Data
-public class TaskFilter extends TaskDO {
 
+@Data
+public class RequirementManageFilter {
+
+    private Integer businessLineId;
     //偏移量
     private Integer offset;
     //每页条数
@@ -17,9 +19,4 @@ public class TaskFilter extends TaskDO {
         return ((pageNum == null || pageNum < 1 ? 1 : pageNum) - 1) * (pageSize == null ? 3 : pageSize);
     }
 
-    public void setDefaultPage() {
-        this.pageNum = null;
-        this.pageSize = null;
-        this.offset = null;
-    }
 }

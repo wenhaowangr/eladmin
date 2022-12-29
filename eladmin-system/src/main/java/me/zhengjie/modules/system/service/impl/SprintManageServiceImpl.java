@@ -10,6 +10,7 @@ import me.zhengjie.modules.system.domain.User;
 import me.zhengjie.modules.system.domain.entity.SprintDO;
 import me.zhengjie.modules.system.domain.entity.SprintManageFilter;
 import me.zhengjie.modules.system.domain.vo.PageVO;
+import me.zhengjie.modules.system.domain.vo.SprintVO;
 import me.zhengjie.modules.system.service.SprintManageService;
 import org.hibernate.annotations.Check;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import static me.zhengjie.modules.system.DateUtils.calculateQuarter;
 
@@ -97,6 +99,11 @@ public class SprintManageServiceImpl implements SprintManageService {
     public int getCurSprint() {
         Date date = new Date();
         return getSprintByDate(date)==null ? 0:getSprintByDate(date).getId();
+    }
+
+    @Override
+    public List<SprintVO> getSprintAndReq() {
+        return null;
     }
 
 }

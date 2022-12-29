@@ -10,11 +10,16 @@ import me.zhengjie.modules.system.domain.vo.TaskDTO;
 import me.zhengjie.modules.system.domain.vo.TaskVO;
 import me.zhengjie.modules.system.service.TaskManageService;
 import me.zhengjie.modules.system.service.WorkloadService;
+import me.zhengjie.modules.system.service.dto.RoleQueryCriteria;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
 
 @Api(tags = "任务管理")
 @RestController
@@ -81,6 +86,23 @@ public class TaskManageController {
             workloadService.deleteRWWorkLoad(id);
         }
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
+    @ApiOperation("下载任务")
+    @GetMapping(value = "/download")
+    public void downloadTask(HttpServletResponse response, @ModelAttribute TaskFilter filter) throws IOException {
+
+        filter.setDefaultPage();
+        PageVO<TaskVO> res = taskManageService.queryTaskByPage(filter);
+        List<TaskVO> taskVOList = res.getData();
+        taskManageService.download(taskVOList, response);
+    }
+
+    @ApiOperation("导入任务")
+    @PostMapping(value = "/upload")
+    public void downloadTask(@RequestParam MultipartFile multipartFile) throws IOException {
+        taskManageService.upload(multipartFile);
     }
 
 

@@ -21,4 +21,6 @@ public interface TaskMapper {
 
     Integer queryTaskTotalCount(TaskFilter taskFilter);
 
+    List<TaskDO> queryTaskByRequirementId(int requirementId);
+
 }

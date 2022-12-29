@@ -82,10 +82,5 @@ public class SprintManageController {
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ApiOperation("查询当前时间所在冲刺")
-    @GetMapping(value = "/getCurSprint")
-    public ResponseEntity<Object> getCurSprint() {
-        return new ResponseEntity<>(sprintManageService.getCurSprint(),HttpStatus.OK);
-    }
 
 }
