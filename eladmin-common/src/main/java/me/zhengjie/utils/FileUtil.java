@@ -175,6 +175,11 @@ public class FileUtil extends cn.hutool.core.io.FileUtil {
         return file;
     }
 
+    /**
+     * 将上传的excelfile 解析成map文件
+     * @param file
+     * @return
+     */
     public static Map<Integer, List<String>> readExcel(MultipartFile file) {
         //存储excel所有sheet信息
         Map<Integer, List<String>> totalList = new HashMap<>();
@@ -191,10 +196,10 @@ public class FileUtil extends cn.hutool.core.io.FileUtil {
                 //获取当前工作表
                 Sheet sheet = workbook.getSheetAt(i);
                 String sheetName = sheet.getSheetName();
-                int numOfRows = sheet.getLastRowNum();
-                if (!("特定的sheet名字".equals(sheetName) || "sheet1".equals(sheetName))) {
+                if (!("人机服务冲测规划".equals(sheetName) || "sheet1".equals(sheetName))) {
                     continue;
                 }
+                int numOfRows = sheet.getPhysicalNumberOfRows();
                 for (int rowNum = 0; rowNum < numOfRows; rowNum++) {
                     List<String> infoList = new ArrayList<>();
                     Row rowData = sheet.getRow(rowNum);

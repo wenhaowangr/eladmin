@@ -16,4 +16,8 @@ public enum TaskStateEnum {
         this.code = code;
     }
 
+    public int getCode() {
+        return code;
+    }
+
 }

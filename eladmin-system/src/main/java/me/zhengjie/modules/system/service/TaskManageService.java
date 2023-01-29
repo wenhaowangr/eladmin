@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 public interface TaskManageService {
 
@@ -26,6 +27,8 @@ public interface TaskManageService {
 
     void download(List<TaskVO> taskVOList, HttpServletResponse response) throws IOException;
 
-    void upload(MultipartFile file);
+    Map<Integer, String> upload(MultipartFile file);
+
+    void updateTaskStatus(int id, int status);
 
 }

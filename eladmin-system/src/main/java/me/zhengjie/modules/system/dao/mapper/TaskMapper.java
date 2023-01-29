@@ -23,4 +23,5 @@ public interface TaskMapper {
 
     List<TaskDO> queryTaskByRequirementId(int requirementId);
 
+    void updateTaskStatus(int id, int status);
 }

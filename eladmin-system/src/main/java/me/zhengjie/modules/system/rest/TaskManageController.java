@@ -10,7 +10,6 @@ import me.zhengjie.modules.system.domain.vo.TaskDTO;
 import me.zhengjie.modules.system.domain.vo.TaskVO;
 import me.zhengjie.modules.system.service.TaskManageService;
 import me.zhengjie.modules.system.service.WorkloadService;
-import me.zhengjie.modules.system.service.dto.RoleQueryCriteria;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -101,8 +100,12 @@ public class TaskManageController {
 
     @ApiOperation("导入任务")
     @PostMapping(value = "/upload")
-    public void downloadTask(@RequestParam MultipartFile multipartFile) throws IOException {
-        taskManageService.upload(multipartFile);
+    public ResponseEntity<Object> uploadTask(@RequestParam MultipartFile multipartFile) throws IOException {
+
+        /**
+         * upload返回报错原因的map, 如果为空, 则代表excel任务添加成功; 如果不为空, 则该excel不添加任何任务
+         */
+        return new ResponseEntity<>(taskManageService.upload(multipartFile), HttpStatus.OK);
     }
 
 

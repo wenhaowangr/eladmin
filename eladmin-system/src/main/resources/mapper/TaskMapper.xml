@@ -135,4 +135,10 @@
         WHERE id = #{id} AND state = 0
     </update>
 
+    <update id="updateTaskStatus">
+        UPDATE tbl_sms_task_info
+        SET status= #{status}
+        WHERE id = #{id} AND state = 0
+    </update>
+
 </mapper>

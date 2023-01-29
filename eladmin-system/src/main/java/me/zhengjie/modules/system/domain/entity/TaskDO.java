@@ -39,4 +39,20 @@ public class TaskDO {
         this.remark = taskDTO.getRemark();
         this.status = taskDTO.getStatus();
     }
+
+
+    public TaskDO(String name, Integer businessLineId, Integer requirementId, Integer sprintId, Integer devEmployeeId,
+                  Date dueDate, String story, String description, String remark, Integer priority, Integer status) {
+        this.name = name;
+        this.businessLineId = businessLineId;
+        this.requirementId = requirementId;
+        this.sprintId = sprintId;
+        this.devEmployeeId = devEmployeeId;
+        this.dueDate = dueDate;
+        this.story = story;
+        this.description = description;
+        this.remark = remark;
+        this.priority = priority;
+        this.status = status;
+    }
 }
