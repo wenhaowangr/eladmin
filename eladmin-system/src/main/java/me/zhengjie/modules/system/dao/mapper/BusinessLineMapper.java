@@ -23,4 +23,6 @@ public interface BusinessLineMapper {
 
     Integer updateBusinessLine(BusinessLineDO businessLineDO);
 
+    BusinessLineDO getBusinessLineByName(String name);
+
 }

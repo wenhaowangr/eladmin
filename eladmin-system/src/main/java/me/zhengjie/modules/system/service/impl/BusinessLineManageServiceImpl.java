@@ -95,4 +95,9 @@ public class BusinessLineManageServiceImpl implements BusinessLineManageService 
         return businessLineMapper.updateBusinessLine(businessLineDO);
     }
 
+    @Override
+    public BusinessLineDO getBusinessLineByName(String name) {
+        return businessLineMapper.getBusinessLineByName(name);
+    }
+
 }

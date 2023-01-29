@@ -65,6 +65,10 @@
         SELECT * FROM  tbl_sms_businessline_info WHERE state = 0
     </select>
 
+    <select id="getBusinessLineByName" resultMap="businessLineMap">
+        SELECT * FROM  tbl_sms_businessline_info WHERE state = 0 AND name =#{name}
+    </select>
+
     <update id="updateBusinessLine">
         UPDATE tbl_sms_businessline_info
         SET

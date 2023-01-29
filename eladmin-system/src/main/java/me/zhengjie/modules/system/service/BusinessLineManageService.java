@@ -18,6 +18,7 @@ public interface BusinessLineManageService {
 
     PageVO<BusinessLineDO> queryBusinessLineByPage(BusinessLineManageFilter filter);
 
-    @Transactional(rollbackFor = Exception.class)
     int update(BusinessLineDO businessLineDO);
+
+    BusinessLineDO getBusinessLineByName(String name);
 }
