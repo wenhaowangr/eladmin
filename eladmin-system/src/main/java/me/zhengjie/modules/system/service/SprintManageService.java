@@ -2,6 +2,7 @@ package me.zhengjie.modules.system.service;
 
 import me.zhengjie.modules.system.domain.entity.SprintDO;
 import me.zhengjie.modules.system.domain.entity.SprintManageFilter;
+import me.zhengjie.modules.system.domain.vo.MyCurTaskVO;
 import me.zhengjie.modules.system.domain.vo.PageVO;
 import me.zhengjie.modules.system.domain.vo.SprintVO;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +19,10 @@ public interface SprintManageService {
     int update(SprintDO sprintDO);
 
     SprintDO getSprintByDate(Date date);
-    int getCurSprint();
 
     List<SprintVO> getSprintAndReq();
+
+    List<MyCurTaskVO> getMyCurTask(String username);
+
+    SprintDO getSprintByName(String name);
 }

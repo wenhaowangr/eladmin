@@ -84,6 +84,13 @@
     <select id="getSprintByDate" resultMap="sprintMap">
         SELECT * FROM tbl_sms_sprint_info WHERE <![CDATA[ begin_date <= #{Date} ]]> AND <![CDATA[ end_date >= #{Date} ]]>
     </select>
+    <select id="findAllByYear" resultMap="sprintMap">
+        SELECT * FROM tbl_sms_sprint_info WHERE quarter like concat(#{yyyy},'%') AND state = 0
+    </select>
+
+    <select id="getSprintByName" resultMap="sprintMap">
+        SELECT * FROM tbl_sms_sprint_info WHERE name =#{name} AND state = 0
+    </select>
 
 
 </mapper>

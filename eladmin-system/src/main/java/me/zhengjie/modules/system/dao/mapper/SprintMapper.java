@@ -25,6 +25,10 @@ public interface SprintMapper {
 
     SprintDO getSprintByDate(Date date);
 
+    List<SprintDO> findAllByYear(int yyyy);
+
+    SprintDO getSprintByName(String name);
+
 //    BusinessLineDO findBusinessLineById(@Param("id") int id);
 //
 //    List<BusinessLineDO> findAllBusinessLines();
