@@ -20,10 +20,12 @@ import me.zhengjie.config.FileProperties;
 import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.modules.security.service.OnlineUserService;
 import me.zhengjie.modules.security.service.UserCacheManager;
+import me.zhengjie.modules.system.dao.mapper.UserMapperV2;
 import me.zhengjie.modules.system.domain.User;
 import me.zhengjie.exception.EntityExistException;
 import me.zhengjie.exception.EntityNotFoundException;
 import me.zhengjie.modules.system.dao.repository.UserRepository;
+import me.zhengjie.modules.system.domain.entity.UserDO;
 import me.zhengjie.modules.system.service.UserService;
 import me.zhengjie.modules.system.service.dto.*;
 import me.zhengjie.modules.system.service.mapstruct.UserLoginMapper;
@@ -36,6 +38,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotBlank;
 import java.io.File;
@@ -60,6 +64,9 @@ public class UserServiceImpl implements UserService {
     private final OnlineUserService onlineUserService;
     private final UserLoginMapper userLoginMapper;
 
+    @Resource
+    UserMapperV2 userMapperV2;
+
     @Override
     public Object queryAll(UserQueryCriteria criteria, Pageable pageable) {
         Page<User> page = userRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root, criteria, criteriaBuilder), pageable);
@@ -81,19 +88,34 @@ public class UserServiceImpl implements UserService {
         return userMapper.toDto(user);
     }
 
+//    @Override
+//    @Transactional(rollbackFor = Exception.class)
+//    public void create(User resources) {
+//        if (userRepository.findByUsername(resources.getUsername()) != null) {
+//            throw new EntityExistException(User.class, "username", resources.getUsername());
+//        }
+//        if (userRepository.findByEmail(resources.getEmail()) != null) {
+//            throw new EntityExistException(User.class, "email", resources.getEmail());
+//        }
+//        if (userRepository.findByPhone(resources.getPhone()) != null) {
+//            throw new EntityExistException(User.class, "phone", resources.getPhone());
+//        }
+//        userRepository.save(resources);
+//    }
+
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void create(User resources) {
-        if (userRepository.findByUsername(resources.getUsername()) != null) {
-            throw new EntityExistException(User.class, "username", resources.getUsername());
+    public void create(UserDO resources) {
+        if (userMapperV2.findByUsername(resources.getUsername()) != null) {
+            throw new EntityExistException(UserDO.class, "username", resources.getUsername());
         }
-        if (userRepository.findByEmail(resources.getEmail()) != null) {
+        if (userMapperV2.findByEmail(resources.getEmail()) != null) {
             throw new EntityExistException(User.class, "email", resources.getEmail());
         }
-        if (userRepository.findByPhone(resources.getPhone()) != null) {
+        if (userMapperV2.findByPhone(resources.getPhone()) != null) {
             throw new EntityExistException(User.class, "phone", resources.getPhone());
         }
-        userRepository.save(resources);
+        userMapperV2.insertUser(resources);
     }
 
     @Override
@@ -176,6 +198,15 @@ public class UserServiceImpl implements UserService {
         } else {
             return userMapper.toDto(user);
         }
+    }
+
+    @Override
+    public UserDO findByNameV2(String userName) {
+        UserDO user = userMapperV2.findByUsername(userName);
+        if (user == null) {
+            throw new EntityNotFoundException(UserDO.class, "name", userName);
+        }
+        return user;
     }
 
     @Override

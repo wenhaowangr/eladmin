@@ -21,9 +21,9 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.config.RsaProperties;
-import me.zhengjie.modules.system.dao.mapper.UserTestMapper;
+import me.zhengjie.modules.system.dao.mapper.UserMapperV2;
 import me.zhengjie.modules.system.domain.Dept;
-import me.zhengjie.modules.system.domain.entity.UserTestDO;
+import me.zhengjie.modules.system.domain.entity.UserDO;
 import me.zhengjie.modules.system.service.DataService;
 import me.zhengjie.modules.system.domain.User;
 import me.zhengjie.exception.BadRequestException;
@@ -72,7 +72,7 @@ public class UserController {
     private final VerifyService verificationCodeService;
 
     @Resource
-    UserTestMapper userTestMapper;
+    UserMapperV2 userMapperV2;
 
     @ApiOperation("导出用户数据")
     @GetMapping(value = "/download")
@@ -109,12 +109,23 @@ public class UserController {
         return new ResponseEntity<>(PageUtil.toPage(null,0),HttpStatus.OK);
     }
 
+//    @Log("新增用户")
+//    @ApiOperation("新增用户")
+//    @PostMapping
+//    @PreAuthorize("@el.check('user:add')")
+//    public ResponseEntity<Object> createUser(@Validated @RequestBody User resources){
+//        checkLevel(resources);
+//        // 默认密码 123456
+//        resources.setPassword(passwordEncoder.encode("123456"));
+//        userService.create(resources);
+//        return new ResponseEntity<>(HttpStatus.CREATED);
+//    }
+
+
     @Log("新增用户")
     @ApiOperation("新增用户")
     @PostMapping
-    @PreAuthorize("@el.check('user:add')")
-    public ResponseEntity<Object> createUser(@Validated @RequestBody User resources){
-        checkLevel(resources);
+    public ResponseEntity<Object> createUser(@Validated @RequestBody UserDO resources){
         // 默认密码 123456
         resources.setPassword(passwordEncoder.encode("123456"));
         userService.create(resources);
@@ -197,8 +208,15 @@ public class UserController {
     @ApiOperation("查询测试")
     @GetMapping(value = "/findAll")
     public ResponseEntity<Object> getUserInfo(){
-        List<UserTestDO> user = userTestMapper.findAllUsers();
-        return new ResponseEntity<>(user,HttpStatus.OK);
+        List<UserDO> user = userMapperV2.findAllUser();
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @ApiOperation("查询特定用户测试")
+    @GetMapping(value = "/findUserByName")
+    public ResponseEntity<Object> getUserInfoByName(){
+        UserDO user = userMapperV2.findByUsername("admin");
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     /**

@@ -16,6 +16,7 @@
 package me.zhengjie.modules.system.service;
 
 import me.zhengjie.modules.system.domain.User;
+import me.zhengjie.modules.system.domain.entity.UserDO;
 import me.zhengjie.modules.system.service.dto.UserDto;
 import me.zhengjie.modules.system.service.dto.UserLoginDto;
 import me.zhengjie.modules.system.service.dto.UserQueryCriteria;
@@ -44,7 +45,7 @@ public interface UserService {
      * 新增用户
      * @param resources /
      */
-    void create(User resources);
+    void create(UserDO resources);
 
     /**
      * 编辑用户
@@ -65,6 +66,13 @@ public interface UserService {
      * @return /
      */
     UserDto findByName(String userName);
+
+    /**
+     * 根据用户名查询
+     * @param userName /
+     * @return /
+     */
+    UserDO findByNameV2(String userName);
 
     /**
      * 根据用户名查询
