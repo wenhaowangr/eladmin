@@ -2,8 +2,6 @@ package me.zhengjie.modules.system.domain.vo;
 
 import lombok.Data;
 import me.zhengjie.modules.system.domain.entity.RequirementDO;
-
-import java.util.Date;
 import java.util.List;
 
 @Data

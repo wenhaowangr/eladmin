@@ -1,6 +1,5 @@
 package me.zhengjie.modules.system.service.impl;
 
-import com.google.common.collect.Lists;
 import me.zhengjie.exception.EntityExistException;
 import me.zhengjie.exception.EntityNotFoundException;
 import me.zhengjie.modules.system.CheckUtils;
@@ -8,14 +7,12 @@ import me.zhengjie.modules.system.dao.mapper.RequirementMapper;
 import me.zhengjie.modules.system.domain.User;
 import me.zhengjie.modules.system.domain.entity.RequirementDO;
 import me.zhengjie.modules.system.domain.entity.RequirementManageFilter;
-import me.zhengjie.modules.system.domain.entity.TaskDO;
 import me.zhengjie.modules.system.domain.entity.TaskFilter;
 import me.zhengjie.modules.system.domain.vo.PageVO;
 import me.zhengjie.modules.system.domain.vo.RequirementVO;
 import me.zhengjie.modules.system.domain.vo.TaskVO;
 import me.zhengjie.modules.system.service.RequirementManageService;
 import me.zhengjie.modules.system.service.TaskManageService;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -89,6 +86,11 @@ public class RequirementManageServiceImpl implements RequirementManageService {
         }
         res.setData(requirementVOList);
         return res;
+    }
+
+    @Override
+    public RequirementDO getRequirementByName(String name) {
+        return requirementMapper.getRequirementByName(name);
     }
 
 

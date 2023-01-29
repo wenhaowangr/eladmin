@@ -14,5 +14,7 @@ public interface RequirementManageService {
     int delete(int id);
 
     PageVO<RequirementVO> queryRequirementAndTaskByPage(RequirementManageFilter requirementManageFilter);
+
+    RequirementDO getRequirementByName(String name);
 }
 

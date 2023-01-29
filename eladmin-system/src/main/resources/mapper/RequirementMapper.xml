@@ -31,7 +31,7 @@
     </update>
 
     <select id="findByRequirementId" resultType="me.zhengjie.modules.system.domain.entity.RequirementDO">
-        SELECT * FROM tbl_sms_requirement_info WHERE id = #{id}
+        SELECT * FROM tbl_sms_requirement_info WHERE id = #{id} AND state = 0
     </select>
 
     <select id="findByBusinessLineIdAndPage" resultMap="RequirementMap">
@@ -62,6 +62,10 @@
             </if>
         </where>
         ) t1
+    </select>
+
+    <select id="getRequirementByName" resultMap="RequirementMap">
+        SELECT * FROM tbl_sms_requirement_info WHERE name = #{name} AND state = 0
     </select>
 
 </mapper>
