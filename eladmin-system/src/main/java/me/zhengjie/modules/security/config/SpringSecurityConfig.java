@@ -122,6 +122,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/sprint/**").permitAll()
                 .antMatchers("/task/**").permitAll()
                 .antMatchers("/requirement/**").permitAll()
+                .antMatchers("/score/**").permitAll()
                 .antMatchers("/index/**").permitAll()
                 // 放行OPTIONS请求
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()

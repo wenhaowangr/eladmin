@@ -7,4 +7,6 @@ public interface EmployeeMapper {
 
     EmployeeDO getEmployeeByName(String name);
 
+    EmployeeDO getEmployeeById(int id);
+
 }

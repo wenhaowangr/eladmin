@@ -6,4 +6,6 @@ import me.zhengjie.modules.system.domain.entity.EmployeeDO;
 public interface EmployeeManageService {
 
     EmployeeDO getEmployeeByName(String name);
+
+    EmployeeDO getEmployeeById(int id);
 }

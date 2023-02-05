@@ -117,6 +117,49 @@
         WHERE state = 0 AND requirement_id = #{requirementId};
     </select>
 
+    <select id="queryTaskBySprintId" resultMap="taskMap">
+        SELECT * FROM  tbl_sms_task_info
+        WHERE state = 0 AND sprint_id = #{sprintId};
+    </select>
+
+    <select id="queryTaskBySprintIds" resultMap="taskMap">
+        SELECT * FROM  tbl_sms_task_info
+        WHERE
+            <if test="sprintIds!= null and sprintIds.size() > 0">
+                sprint_id IN
+                <foreach collection="sprintIds" item="sprintId" separator="," open="(" close=")">
+                    #{sprintId}
+                </foreach>
+            </if>
+        AND status = 0
+    </select>
+
+    <select id="queryWorkloadOfTaskBySprintIds"
+            resultType="me.zhengjie.modules.system.domain.entity.TaskInfoDO">
+        SELECT
+            t.id as id,
+            t.name as name,
+            t.businessLine_id as businessLineId,
+            t.requirement_id as requirementId,
+            t.sprint_id as sprintId,
+            w.type as type,
+            w.quarter as quarter,
+            e.id as devEmployeeId,
+            e.name as devEmployeeName,
+            (case when w.workload is null then 0 else w.workload end) as workload
+        FROM tbl_sms_task_info AS t
+            JOIN tbl_sms_task_workload_info AS w ON t.id = w.task_id
+            JOIN tbl_sms_employee_info AS e ON t.dev_employee_id = e.id
+        WHERE
+        <if test="sprintIds!= null and sprintIds.size() > 0">
+            t.sprint_id IN
+            <foreach collection="sprintIds" item="sprintId" separator="," open="(" close=")">
+                #{sprintId}
+            </foreach>
+        </if>
+        AND t.state = 0 AND w.state = 0 AND e.state = 0
+    </select>
+
 
     <update id="updateTask">
         UPDATE tbl_sms_task_info

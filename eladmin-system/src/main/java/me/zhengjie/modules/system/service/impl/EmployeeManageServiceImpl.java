@@ -19,4 +19,9 @@ public class EmployeeManageServiceImpl implements EmployeeManageService {
         return employeeMapper.getEmployeeByName(name);
     }
 
+    @Override
+    public EmployeeDO getEmployeeById(int id) {
+        return employeeMapper.getEmployeeById(id);
+    }
+
 }

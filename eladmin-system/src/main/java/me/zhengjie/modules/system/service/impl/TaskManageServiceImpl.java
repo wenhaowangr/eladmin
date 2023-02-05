@@ -5,9 +5,10 @@ import me.zhengjie.modules.system.domain.entity.*;
 import me.zhengjie.modules.system.domain.vo.PageVO;
 import me.zhengjie.modules.system.domain.vo.TaskVO;
 import me.zhengjie.modules.system.service.*;
-import me.zhengjie.utils.FileUtil;
+import me.zhengjie.modules.system.utils.FileUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -22,15 +23,7 @@ public class TaskManageServiceImpl implements TaskManageService {
     @Resource
     TaskMapper taskMapper;
     @Resource
-    BusinessLineMapper businessLineMapper;
-    @Resource
-    SprintMapper sprintMapper;
-    @Resource
-    RequirementMapper requirementMapper;
-    @Resource
-    EmployeeMapper employeeMapper;
-
-    private static final int EXCEL_COLUMN_NUM = 14;
+    TaskUploadService taskUploadService;
 
     private static SimpleDateFormat yyyyMMdd = new SimpleDateFormat("yyyyMMdd");
 
@@ -77,6 +70,51 @@ public class TaskManageServiceImpl implements TaskManageService {
     }
 
     @Override
+    public List<TaskDO> queryTaskBySprintId(int sprintId) {
+
+        return taskMapper.queryTaskBySprintId(sprintId);
+    }
+
+    @Override
+    public Map<Integer, List<TaskDO>> queryTaskBySprintIds(List<Integer> sprintIds) {
+
+        Map<Integer, List<TaskDO>> sprintTaskMap = new HashMap<>();
+        if (CollectionUtils.isEmpty(sprintIds)) {
+            return sprintTaskMap;
+        }
+        List<TaskDO> taskDOList = taskMapper.queryTaskBySprintIds(sprintIds);
+        for (TaskDO taskDO : taskDOList) {
+            int sprintId = taskDO.getSprintId();
+            if (sprintTaskMap.containsKey(sprintId)) {
+                sprintTaskMap.get(sprintId).add(taskDO);
+            } else {
+                List<TaskDO> taskDOs = new ArrayList<>();
+                taskDOs.add(taskDO);
+                sprintTaskMap.put(sprintId, taskDOs);
+            }
+        }
+        return sprintTaskMap;
+    }
+
+    @Override
+    public Map<Integer, List<TaskInfoDO>> queryWorkloadOfTaskBySprintIds(List<Integer> sprintIds) {
+
+        List<TaskInfoDO> taskInfoDOs = taskMapper.queryWorkloadOfTaskBySprintIds(sprintIds);
+        HashMap<Integer, List<TaskInfoDO>> taskIdInfoMap = new HashMap<>();
+        for (TaskInfoDO taskInfoDO : taskInfoDOs) {
+            int sprintId = taskInfoDO.getSprintId();
+            if (taskIdInfoMap.containsKey(sprintId)) {
+                taskIdInfoMap.get(sprintId).add(taskInfoDO);
+            } else {
+                List<TaskInfoDO> temp = new ArrayList<>();
+                temp.add(taskInfoDO);
+                taskIdInfoMap.put(sprintId, temp);
+            }
+        }
+        return taskIdInfoMap;
+    }
+
+    @Override
     public void download(List<TaskVO> taskVOList, HttpServletResponse response) throws IOException {
         List<Map<String, Object>> list = new ArrayList<>();
         for (TaskVO taskVO : taskVOList) {
@@ -96,13 +134,13 @@ public class TaskManageServiceImpl implements TaskManageService {
             list.add(map);
         }
 
-        FileUtil.downloadExcel(list, response);
+        FileUtils.downloadExcel(list, response);
     }
 
     @Override
     public Map<Integer, String> upload(MultipartFile file) {
 
-        Map<Integer, List<String>> excelInfo = FileUtil.readExcel(file);
+        Map<Integer, List<String>> excelInfo = FileUtils.readExcel(file);
         // key: 行数, value: 失败原因
         Map<Integer, String> resultMap = new HashMap<>();
         /**
@@ -118,154 +156,13 @@ public class TaskManageServiceImpl implements TaskManageService {
          * 4. 构建TaskDO insert
          */
 
-        List<TaskDO> taskDOList = excel2TaskDOList(excelInfo, resultMap);
-
+        List<TaskDO> taskDOList = taskUploadService.excel2TaskDOList(excelInfo, resultMap);
         if (MapUtils.isEmpty(resultMap)) {
             for (TaskDO taskDO : taskDOList) {
                 add(taskDO);
             }
         }
         return resultMap;
-    }
-
-    /**
-     * 将excel的内容转换成TaskDO
-     *
-     * @param excelInfo
-     * @param resultMap
-     * @return
-     */
-    public List<TaskDO> excel2TaskDOList(Map<Integer, List<String>> excelInfo, Map<Integer, String> resultMap) {
-
-        List<TaskDO> taskDOList = new ArrayList<>();
-        List<String> firstRow = new ArrayList<>();
-        int row = 0;
-        try {
-            for (Map.Entry<Integer, List<String>> entry : excelInfo.entrySet()) {
-                row++;
-                StringBuffer rowResult = new StringBuffer();
-                List<String> content = entry.getValue();
-                if (content.size() != EXCEL_COLUMN_NUM) {
-                    continue;
-                }
-                if (content.contains("任务ID") || content.contains("评估工作量")) {
-                    firstRow = content;
-                    continue;
-                }
-                TaskVO taskVO = excelRow2TaskVO(firstRow, content, rowResult);
-                TaskDO taskDO = taskVO2TaskDO(taskVO, rowResult);
-                taskDOList.add(taskDO);
-                if (rowResult.length() != 0) {
-                    resultMap.put(row, rowResult.toString());
-                }
-            }
-        } catch (Exception e) {
-            resultMap.put(-1, "运行异常！");
-        }
-        return taskDOList;
-    }
-
-    /**
-     * 将每一行的内容转换成TaskVO
-     *
-     * @param firstRow 表头标题
-     * @param content  行内容
-     * @return
-     */
-    private TaskVO excelRow2TaskVO(List<String> firstRow, List<String> content, StringBuffer rowResult){
-
-        TaskVO taskVO = new TaskVO();
-        for (int i = 0; i < firstRow.size(); i++) {
-            String colName = firstRow.get(i);
-            String cellContent = content.get(i);
-            if ("条线".equals(colName)) {
-                taskVO.setBusinessLineName(cellContent);
-            } else if ("需求".equals(colName)) {
-                taskVO.setRequirementName(cellContent);
-            } else if ("用户故事".equals(colName)) {
-                taskVO.setStory(cellContent);
-            } else if ("任务名称".equals(colName)) {
-                taskVO.setName(cellContent);
-            } else if ("任务详细描述".equals(colName)) {
-                taskVO.setDescription(cellContent);
-            } else if ("优先级".equals(colName)) {
-                try {
-                    taskVO.setPriority(Integer.valueOf(cellContent));
-                } catch (Exception e) {
-                    rowResult.append("优先级格式错误!");
-                }
-            } else if ("开发者".equals(colName)) {
-                taskVO.setDevEmployeeName(cellContent);
-            } else if ("评估工作量".equals(colName)) {
-                try {
-                    taskVO.setWorkload(Double.valueOf(cellContent));
-                } catch (Exception e) {
-                    rowResult.append("评估工作量格式错误!");
-                }
-            } else if ("计划完成时间".equals(colName)) {
-                try {
-                    taskVO.setDueDate(yyyyMMdd.parse(cellContent));
-                } catch (Exception e) {
-                    rowResult.append("计划完成时间格式错误!");
-                }
-            } else if ("备注（是否外包开发）".equals(colName)) {
-                taskVO.setRemark(cellContent);
-            } else if ("冲刺".equals(colName)) {
-                taskVO.setSprintName(cellContent);
-            }
-        }
-        return taskVO;
-    }
-
-
-    public TaskDO taskVO2TaskDO(TaskVO taskVO, StringBuffer rowResult) {
-
-        String name = taskVO.getName();
-        Date dueDate = taskVO.getDueDate();
-        String story = taskVO.getStory();
-        String description = taskVO.getDescription();
-        String remark = taskVO.getRemark();
-        Integer priority = taskVO.getPriority();
-        Integer status = 2;
-
-        Integer businessLineId = 0;
-        Integer requirementId = 0;
-        Integer springId = 0;
-        Integer employeeId = 0;
-
-        String businessLineName = taskVO.getBusinessLineName();
-        BusinessLineDO businessLineDO = businessLineMapper.getBusinessLineByName(businessLineName);
-        if (businessLineDO == null) {
-            rowResult.append("条线不存在!");
-        } else {
-            businessLineId = businessLineDO.getId();
-        }
-
-        String requirementName = taskVO.getRequirementName();
-        RequirementDO requirementDO = requirementMapper.getRequirementByName(requirementName);
-        if (requirementDO == null) {
-            rowResult.append("需求不存在!");
-        } else {
-            requirementId = requirementDO.getId();
-        }
-
-        String sprintName = taskVO.getSprintName();
-        SprintDO sprintDO = sprintMapper.getSprintByName(sprintName);
-        if (sprintDO == null) {
-            rowResult.append("冲刺不存在!");
-        } else {
-            springId = sprintDO.getId();
-        }
-
-        String devEmployeeName = taskVO.getDevEmployeeName();
-        EmployeeDO employeeDO = employeeMapper.getEmployeeByName(devEmployeeName);
-        if (employeeDO == null) {
-            rowResult.append("开发者不存在!");
-        } else {
-            employeeId = employeeDO.getId();
-        }
-
-        return new TaskDO(name, businessLineId, requirementId, springId, employeeId, dueDate, story, description, remark, priority, status);
     }
 
     @Override

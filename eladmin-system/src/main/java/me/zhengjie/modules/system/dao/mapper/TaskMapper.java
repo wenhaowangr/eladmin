@@ -1,9 +1,10 @@
 package me.zhengjie.modules.system.dao.mapper;
 
-import io.swagger.models.auth.In;
 import me.zhengjie.modules.system.domain.entity.TaskDO;
 import me.zhengjie.modules.system.domain.entity.TaskFilter;
+import me.zhengjie.modules.system.domain.entity.TaskInfoDO;
 import me.zhengjie.modules.system.domain.vo.TaskVO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -22,6 +23,12 @@ public interface TaskMapper {
     Integer queryTaskTotalCount(TaskFilter taskFilter);
 
     List<TaskDO> queryTaskByRequirementId(int requirementId);
+
+    List<TaskDO> queryTaskBySprintId(int sprintId);
+
+    List<TaskDO> queryTaskBySprintIds(@Param("sprintIds") List<Integer> sprintIds);
+
+    List<TaskInfoDO> queryWorkloadOfTaskBySprintIds(@Param("sprintIds") List<Integer> sprintIds);
 
     void updateTaskStatus(int id, int status);
 }
