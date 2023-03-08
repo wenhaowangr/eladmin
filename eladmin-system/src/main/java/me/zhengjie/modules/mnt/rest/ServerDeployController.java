@@ -1,24 +1,9 @@
-/*
- *  Copyright 2019-2020 Zheng Jie
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- */
+
 package me.zhengjie.modules.mnt.rest;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import me.zhengjie.annotation.Log;
 import me.zhengjie.modules.mnt.domain.ServerDeploy;
 import me.zhengjie.modules.mnt.service.ServerDeployService;
 import me.zhengjie.modules.mnt.service.dto.ServerDeployQueryCriteria;
@@ -58,7 +43,6 @@ public class ServerDeployController {
     	return new ResponseEntity<>(serverDeployService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
-    @Log("新增服务器")
     @ApiOperation(value = "新增服务器")
     @PostMapping
 	@PreAuthorize("@el.check('serverDeploy:add')")
@@ -67,7 +51,6 @@ public class ServerDeployController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @Log("修改服务器")
     @ApiOperation(value = "修改服务器")
     @PutMapping
 	@PreAuthorize("@el.check('serverDeploy:edit')")
@@ -76,7 +59,6 @@ public class ServerDeployController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除服务器")
     @ApiOperation(value = "删除Server")
 	@DeleteMapping
 	@PreAuthorize("@el.check('serverDeploy:del')")
@@ -85,7 +67,6 @@ public class ServerDeployController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-	@Log("测试连接服务器")
 	@ApiOperation(value = "测试连接服务器")
 	@PostMapping("/testConnect")
 	@PreAuthorize("@el.check('serverDeploy:add')")
