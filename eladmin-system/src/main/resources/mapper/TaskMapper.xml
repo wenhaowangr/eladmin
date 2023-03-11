@@ -139,6 +139,7 @@
                 AND d.status = #{requirementStatus}
             </if>
         </where>
+        order by a.rec_upd_ts desc, a.businessLine_id asc
         <if test="pageSize != null and pageNum != null">
             limit #{offset}, #{pageSize}
         </if>
@@ -231,6 +232,10 @@
         AND t.state = 0 AND w.state = 0 AND e.state = 0
     </select>
 
+    <select id="queryTaskById" resultType="me.zhengjie.modules.system.domain.entity.TaskDO">
+        select * from tbl_sms_task_info
+        WHERE id = #{id} and state = 0
+    </select>
 
     <update id="updateTask">
         UPDATE tbl_sms_task_info

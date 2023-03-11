@@ -1,6 +1,7 @@
 package me.zhengjie.modules.system.service.impl;
 
 import me.zhengjie.exception.BizException;
+import me.zhengjie.modules.system.CheckUtils;
 import me.zhengjie.modules.system.TaskStateEnum;
 import me.zhengjie.modules.system.dao.mapper.*;
 import me.zhengjie.modules.system.domain.entity.*;
@@ -30,6 +31,12 @@ public class TaskManageServiceImpl implements TaskManageService {
     TaskUploadService taskUploadService;
     @Resource
     WorkloadService workloadService;
+    @Resource
+    RequirementMapper requirementMapper;
+    @Resource
+    BusinessLineMapper businessLineMapper;
+    @Resource
+    SprintMapper sprintMapper;
 
     private static SimpleDateFormat yyyyMMdd = new SimpleDateFormat("yyyyMMdd");
 
@@ -47,7 +54,20 @@ public class TaskManageServiceImpl implements TaskManageService {
 
     @Override
     public int add(TaskDO taskDO) {
-
+        CheckUtils.checkNonNullWithMsg("任务信息填写不完整！", taskDO, taskDO.getBusinessLineId(),
+                taskDO.getName(), taskDO.getRequirementId(), taskDO.getStatus());
+        Integer requirementId = taskDO.getRequirementId();
+        if (requirementMapper.findByRequirementId(requirementId) == null) {
+            throw new BizException("需求不存在!");
+        }
+        Integer businessLineId = taskDO.getBusinessLineId();
+        if (businessLineMapper.findByBusinessLineId(businessLineId) == null) {
+            throw new BizException("条线不存在!");
+        }
+        Integer sprintId = taskDO.getSprintId();
+        if (sprintId != null && sprintMapper.findBySprintId(sprintId) == null) {
+            throw new BizException("冲刺不存在!");
+        }
         return taskMapper.insertTask(taskDO);
     }
 
@@ -65,7 +85,23 @@ public class TaskManageServiceImpl implements TaskManageService {
 
     @Override
     public int update(TaskDO taskDO) {
-
+        CheckUtils.checkNonNullWithMsg("任务信息填写不完整！", taskDO, taskDO.getBusinessLineId(),
+                taskDO.getName(), taskDO.getRequirementId(), taskDO.getStatus());
+        if (taskMapper.queryTaskById(taskDO.getId()) == null) {
+            throw new BizException("任务不存在!");
+        }
+        Integer requirementId = taskDO.getRequirementId();
+        if (requirementMapper.findByRequirementId(requirementId) == null) {
+            throw new BizException("需求不存在!");
+        }
+        Integer businessLineId = taskDO.getBusinessLineId();
+        if (businessLineMapper.findByBusinessLineId(businessLineId) == null) {
+            throw new BizException("条线不存在!");
+        }
+        Integer sprintId = taskDO.getSprintId();
+        if (sprintId != null && sprintMapper.findBySprintId(sprintId) == null) {
+            throw new BizException("冲刺不存在!");
+        }
         return taskMapper.updateTask(taskDO);
     }
 

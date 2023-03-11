@@ -31,4 +31,6 @@ public interface TaskMapper {
     List<TaskInfoDO> queryWorkloadOfTaskBySprintIds(@Param("sprintIds") List<Integer> sprintIds);
 
     void updateTaskStatus(int id, int status);
+
+    TaskDO queryTaskById(int id);
 }
