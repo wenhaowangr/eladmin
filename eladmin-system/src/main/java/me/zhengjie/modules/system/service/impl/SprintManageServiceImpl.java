@@ -2,7 +2,6 @@ package me.zhengjie.modules.system.service.impl;
 
 import com.google.common.collect.Lists;
 import me.zhengjie.exception.BizException;
-import me.zhengjie.exception.EntityExistException;
 import me.zhengjie.exception.EntityNotFoundException;
 import me.zhengjie.modules.system.CheckUtils;
 import me.zhengjie.modules.system.dao.mapper.SprintMapper;
@@ -16,7 +15,6 @@ import me.zhengjie.modules.system.service.EmployeeManageService;
 import me.zhengjie.modules.system.service.SprintManageService;
 import me.zhengjie.modules.system.service.TaskManageService;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
@@ -37,18 +35,19 @@ public class SprintManageServiceImpl implements SprintManageService {
     EmployeeManageService employeeManageService;
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public int add(SprintDO sprintDO) {
-        if (sprintMapper.findBySprintName(sprintDO.getName()) != null) {
-            throw new EntityExistException(User.class, "SprintName", sprintDO.getName());
-        }
-        // beginDate=2022-12-01, endDate=2022-12-21, quarter=2022Q4
+
+        // 必填校验
+        CheckUtils.checkNonNullWithMsg("入参校验失败!", sprintDO, sprintDO.getName(), sprintDO.getBeginDate(),
+                sprintDO.getEndDate());
+
+        // 示例 : beginDate=2022-12-01, endDate=2022-12-21, quarter=2022Q4
+        // 起止时间规范校验
         Date beginDate = sprintDO.getBeginDate();
         Date endDate = sprintDO.getEndDate();
-        CheckUtils.checkBeginDateEarlierThanEndDate("冲刺结束时间需晚于冲刺开始时间！", beginDate, endDate);
-        if (getSprintByDate(beginDate) != null || getSprintByDate(endDate) != null) {
-            throw new BizException("冲刺时间重合!");
-        }
+        CheckUtils.checkBeginDateEarlierThanEndDate("时间校验失败！", beginDate, endDate);
+        // 冲刺时间重合校验
+        checkSprintDateOverlap(sprintDO, null);
 
         String quarter = calculateQuarter(beginDate, endDate);
         sprintDO.setQuarter(quarter);
@@ -56,7 +55,6 @@ public class SprintManageServiceImpl implements SprintManageService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public int delete(int id) {
         if (sprintMapper.findBySprintId(id) == null) {
             throw new EntityNotFoundException(User.class, "SprintId", String.valueOf(id));
@@ -65,12 +63,11 @@ public class SprintManageServiceImpl implements SprintManageService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public PageVO<SprintDO> querySprintByPage(SprintManageFilter sprintManageFilter) {
 
+        // 入参校验
         CheckUtils.checkNonNullWithMsg("查询对象为空！", sprintManageFilter);
-        //CheckUtils.checkNonNullWithMsg("开始日期为空！", sprintManageFilter.getBeginDate());
-        //CheckUtils.checkNonNullWithMsg("结束日期为空！", sprintManageFilter.getEndDate());
+        CheckUtils.checkBeginDateEarlierThanEndDate("时间校验失败！", sprintManageFilter.getBeginDate(), sprintManageFilter.getEndDate());
         int pageSize = sprintManageFilter.getPageSize();
         int pageNum = sprintManageFilter.getPageNum();
         int totalCount = sprintMapper.querySprintTotalCount(sprintManageFilter);
@@ -83,14 +80,20 @@ public class SprintManageServiceImpl implements SprintManageService {
 
     // int update(SprintDO sprintDO);
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public int update(SprintDO sprintDO) {
+        // 必填校验
+        CheckUtils.checkNonNullWithMsg("入参校验失败!", sprintDO, sprintDO.getName(), sprintDO.getBeginDate(),
+                sprintDO.getEndDate());
+        // 起止时间规范校验
+        CheckUtils.checkBeginDateEarlierThanEndDate("时间校验失败！", sprintDO.getBeginDate(), sprintDO.getEndDate());
+        // 冲刺时间重合校验
+        checkSprintDateOverlap(sprintDO, sprintDO.getId());
+        // 冲刺是否存在校验
         if (sprintMapper.findBySprintId(sprintDO.getId()) == null) {
-            throw new EntityNotFoundException(User.class, "SprintId", String.valueOf(sprintDO.getId()));
+            throw new EntityNotFoundException(SprintDO.class, "SprintId", String.valueOf(sprintDO.getId()));
         }
-        Date beginDate = sprintDO.getBeginDate();
-        Date endDate = sprintDO.getEndDate();
-        String quarter = calculateQuarter(beginDate, endDate);
+
+        String quarter = calculateQuarter(sprintDO.getBeginDate(), sprintDO.getEndDate());
         sprintDO.setQuarter(quarter);
         return sprintMapper.updateSprint(sprintDO);
     }
@@ -122,7 +125,7 @@ public class SprintManageServiceImpl implements SprintManageService {
             // 根据冲刺ID查询任务
             TaskFilter taskFilter = buildTaskFilter(sprintDO.getId());
             PageVO<TaskVO> taskVOs = taskManageService.queryTaskByPage(taskFilter);
-            for (TaskVO taskVO : taskVOs.getData()){
+            for (TaskVO taskVO : taskVOs.getData()) {
                 requirementNameList.add(taskVO.getRequirementName());
             }
             sprintVO.setRequirementNameList(requirementNameList);
@@ -150,7 +153,7 @@ public class SprintManageServiceImpl implements SprintManageService {
         TaskFilter taskFilter = buildTaskFilter(curSprintId);
         taskFilter.setDevEmployeeId(employeeDO.getId());
         PageVO<TaskVO> taskVOs = taskManageService.queryTaskByPage(taskFilter);
-        for (TaskVO taskVO : taskVOs.getData()){
+        for (TaskVO taskVO : taskVOs.getData()) {
             MyCurTaskVO myCurTaskVO = new MyCurTaskVO(taskVO);
             res.add(myCurTaskVO);
         }
@@ -167,5 +170,38 @@ public class SprintManageServiceImpl implements SprintManageService {
         taskFilter.setSprintId(sprintId);
         return taskFilter;
     }
+
+    private void checkSprintDateOverlap(SprintDO sprintDO, Integer sprintId) {
+
+        SprintDO sprintOnBeginDate = getSprintByDate(sprintDO.getBeginDate());
+        SprintDO sprintOnEndDate = getSprintByDate(sprintDO.getEndDate());
+
+        // 没有任何重合
+        if (sprintOnBeginDate == null && sprintOnEndDate == null) {
+            return;
+        }
+        // 新增, 直接抛异常
+        if (sprintId == null) {
+            throw new BizException("冲刺时间重合!");
+        }
+        // 编辑
+        if (sprintOnBeginDate != null && sprintOnEndDate != null) {
+            if (!(Objects.equals(sprintOnBeginDate.getId(), sprintId) && Objects.equals(sprintOnEndDate.getId(), sprintId))) {
+                throw new BizException("冲刺时间重合!");
+            }
+        } else {
+            if (sprintOnBeginDate != null){
+                if (!Objects.equals(sprintOnBeginDate.getId(), sprintId)) {
+                    throw new BizException("冲刺时间重合!");
+                }
+            } else {
+                if (!Objects.equals(sprintOnEndDate.getId(), sprintId)) {
+                    throw new BizException("冲刺时间重合!");
+                }
+            }
+        }
+
+    }
+
 
 }

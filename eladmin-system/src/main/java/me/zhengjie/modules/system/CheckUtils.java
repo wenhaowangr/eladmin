@@ -1,6 +1,7 @@
 package me.zhengjie.modules.system;
 
 import com.alibaba.fastjson.JSON;
+import me.zhengjie.exception.BizException;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -25,7 +26,15 @@ public class CheckUtils {
         }
     }
 
+    // 起止时间规范校验
     public static <T> void checkBeginDateEarlierThanEndDate(String msg, Date beginDate, Date endDate) throws RuntimeException{
+
+        if (beginDate == null && endDate == null) {
+            return;
+        }
+        if ((beginDate != null && endDate == null) || (beginDate == null && endDate != null)) {
+            throw new RuntimeException(msg);
+        }
         if (beginDate.after(endDate)) {
             throw new RuntimeException(msg);
         }

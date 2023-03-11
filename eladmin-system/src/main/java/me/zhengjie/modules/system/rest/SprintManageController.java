@@ -60,7 +60,7 @@ public class SprintManageController {
 
     @ApiOperation("编辑冲刺")
     @PostMapping(value = "/update")
-    public ResponseEntity<Object> updateSprint(@ModelAttribute SprintDO sprintDO) {
+    public ResponseEntity<Object> updateSprint(@Validated @RequestBody SprintDO sprintDO) {
         int rowAffected = sprintManageService.update(sprintDO);
         if (rowAffected > 0) {
             return new ResponseEntity<>(HttpStatus.OK);

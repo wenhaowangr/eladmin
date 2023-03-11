@@ -43,6 +43,7 @@
             </if>
         </if>
     </where>
+    order by begin_date desc
     <if test="pageSize != null and pageNum != null">
         limit #{offset}, #{pageSize}
     </if>
