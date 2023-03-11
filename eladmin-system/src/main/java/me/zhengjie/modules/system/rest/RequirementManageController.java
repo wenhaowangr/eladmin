@@ -5,8 +5,8 @@ import io.swagger.annotations.ApiOperation;
 import me.zhengjie.modules.system.domain.entity.RequirementDO;
 import me.zhengjie.modules.system.domain.entity.RequirementManageFilter;
 import me.zhengjie.modules.system.domain.vo.PageVO;
-import me.zhengjie.modules.system.domain.vo.RequirementVO;
 import me.zhengjie.modules.system.service.RequirementManageService;
+import me.zhengjie.modules.system.service.dto.RequirementDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,11 +20,11 @@ public class RequirementManageController {
     @Resource
     RequirementManageService requirementManageService;
 
-    @ApiOperation("查询条线下的需求和任务")
-    @GetMapping(value = "/queryReqAndTaskInBusLine")
+    @ApiOperation("查询需求")
+    @GetMapping(value = "/queryRequirement")
     public ResponseEntity<Object> queryRequirement(@ModelAttribute RequirementManageFilter requirementManageFilter) {
 
-        PageVO<RequirementVO> requirementVOPageVO = requirementManageService.queryRequirementAndTaskByPage(requirementManageFilter);
+        PageVO<RequirementDTO> requirementVOPageVO = requirementManageService.queryRequirement(requirementManageFilter);
         return new ResponseEntity<>(requirementVOPageVO, HttpStatus.OK);
     }
 

@@ -3,7 +3,7 @@ package me.zhengjie.modules.system.service;
 import me.zhengjie.modules.system.domain.entity.RequirementDO;
 import me.zhengjie.modules.system.domain.entity.RequirementManageFilter;
 import me.zhengjie.modules.system.domain.vo.PageVO;
-import me.zhengjie.modules.system.domain.vo.RequirementVO;
+import me.zhengjie.modules.system.service.dto.RequirementDTO;
 
 public interface RequirementManageService {
 
@@ -13,7 +13,7 @@ public interface RequirementManageService {
 
     int delete(int id);
 
-    PageVO<RequirementVO> queryRequirementAndTaskByPage(RequirementManageFilter requirementManageFilter);
+    PageVO<RequirementDTO> queryRequirement(RequirementManageFilter requirementManageFilter);
 
     RequirementDO getRequirementByName(String name);
 }

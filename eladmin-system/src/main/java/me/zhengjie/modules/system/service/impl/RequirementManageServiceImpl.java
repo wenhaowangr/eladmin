@@ -1,20 +1,19 @@
 package me.zhengjie.modules.system.service.impl;
 
+import com.google.common.collect.Lists;
+import me.zhengjie.exception.BizException;
 import me.zhengjie.exception.EntityExistException;
 import me.zhengjie.exception.EntityNotFoundException;
 import me.zhengjie.modules.system.CheckUtils;
+import me.zhengjie.modules.system.dao.mapper.BusinessLineMapper;
 import me.zhengjie.modules.system.dao.mapper.RequirementMapper;
 import me.zhengjie.modules.system.domain.User;
-import me.zhengjie.modules.system.domain.entity.RequirementDO;
-import me.zhengjie.modules.system.domain.entity.RequirementManageFilter;
-import me.zhengjie.modules.system.domain.entity.TaskFilter;
+import me.zhengjie.modules.system.domain.entity.*;
 import me.zhengjie.modules.system.domain.vo.PageVO;
-import me.zhengjie.modules.system.domain.vo.RequirementVO;
-import me.zhengjie.modules.system.domain.vo.TaskVO;
 import me.zhengjie.modules.system.service.RequirementManageService;
-import me.zhengjie.modules.system.service.TaskManageService;
+import me.zhengjie.modules.system.service.dto.RequirementDTO;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -26,77 +25,84 @@ public class RequirementManageServiceImpl implements RequirementManageService {
     @Resource
     private RequirementMapper requirementMapper;
     @Resource
-    private TaskManageService taskManageService;
+    private BusinessLineMapper businessLineMapper;
+
 
     @Override
     public int add(RequirementDO requirementDO) {
-        if (requirementMapper.findByRequirementName(requirementDO.getName()) != null) {
-            throw new EntityExistException(User.class, "RequirementName", requirementDO.getName());
-        }
+        // 必填校验
+        CheckUtils.checkNonNullWithMsg("需求不能为空！", requirementDO);
         CheckUtils.checkNonNullWithMsg("需求归属条线不能为空！", requirementDO.getBusinessLineId());
         CheckUtils.checkNonNullWithMsg("需求名字不能为空！", requirementDO.getName());
         CheckUtils.checkNonNullWithMsg("需求截止日期不能为空！", requirementDO.getDueDate());
+        // 需求名称唯一性校验
+        if (requirementMapper.findByRequirementName(requirementDO.getName()) != null) {
+            throw new EntityExistException(RequirementDO.class, "RequirementName", requirementDO.getName());
+        }
+        // 条线存在校验
+        if (businessLineMapper.findByBusinessLineId(requirementDO.getBusinessLineId()) != null) {
+            throw new BizException("条线不存在！");
+        }
         return requirementMapper.insertRequirement(requirementDO);
     }
 
+
     @Override
     public int update(RequirementDO requirementDO) {
-        if (requirementMapper.findByRequirementId(requirementDO.getId()) == null) {
-            throw new EntityNotFoundException(User.class, "RequirementId", String.valueOf(requirementDO.getId()));
-        }
+        // 必填校验
+        CheckUtils.checkNonNullWithMsg("需求不能为空！", requirementDO);
         CheckUtils.checkNonNullWithMsg("需求归属条线不能为空！", requirementDO.getBusinessLineId());
         CheckUtils.checkNonNullWithMsg("需求名字不能为空！", requirementDO.getName());
         CheckUtils.checkNonNullWithMsg("需求截止日期不能为空！", requirementDO.getDueDate());
+        // 需求存在校验
+        if (requirementMapper.findByRequirementId(requirementDO.getId()) == null) {
+            throw new EntityNotFoundException(RequirementDO.class, "RequirementId", String.valueOf(requirementDO.getId()));
+        }
+        // 条线存在校验
+        if (businessLineMapper.findByBusinessLineId(requirementDO.getBusinessLineId()) != null) {
+            throw new BizException("条线不存在！");
+        }
         return requirementMapper.updateRequirement(requirementDO);
     }
 
+
     @Override
     public int delete(int id) {
-        if (requirementMapper.findByRequirementId(id) == null){
+        if (requirementMapper.findByRequirementId(id) == null) {
             throw new EntityNotFoundException(User.class, "RequirementId", String.valueOf(id));
         }
         return requirementMapper.deleteRequirement(id);
     }
 
-    @Override
-    public PageVO<RequirementVO> queryRequirementAndTaskByPage(RequirementManageFilter requirementManageFilter) {
 
+    @Override
+    public PageVO<RequirementDTO> queryRequirement(RequirementManageFilter requirementManageFilter) {
         int pageSize = requirementManageFilter.getPageSize();
         int pageNum = requirementManageFilter.getPageNum();
-        int businessLineId = requirementManageFilter.getBusinessLineId();
-        int totalCount = requirementMapper.queryTotalCountByBusinessLineId(businessLineId);//总需求数
-        PageVO<RequirementVO> res = new PageVO<RequirementVO>(pageSize, pageNum, totalCount, new ArrayList<>());
-
-        // 1.根据条线ID查询所有需求
-        List<RequirementDO> requirementDOs = requirementMapper.findByBusinessLineIdAndPage(requirementManageFilter);
-        if (requirementDOs == null || CollectionUtils.isEmpty(requirementDOs)) {
-            return res;
+        Integer totalCount = requirementMapper.queryRequirementTotalCount(requirementManageFilter);
+        if (totalCount == 0) {
+            return new PageVO<RequirementDTO>(pageSize, pageNum, totalCount, Lists.newArrayList());
         }
+        List<RequirementDO> requirementDOList = requirementMapper.queryRequirementByPage(requirementManageFilter);
+        List<RequirementDTO> requirementDTOList = new ArrayList<>();
+        requirementDOList.forEach((requirementDO) -> {
+            requirementDTOList.add(convertDO2DTO(requirementDO));
+        });
 
-        List<RequirementVO> requirementVOList = new ArrayList<>();
-        // 2.根据需求ID查询所有任务
-        for (RequirementDO requirementDO : requirementDOs) {
-
-            RequirementVO requirementVO = new RequirementVO(requirementDO);
-            // 根据需求ID查询任务
-            TaskFilter taskFilter = buildTaskFilter(requirementDO.getId());
-            PageVO<TaskVO> taskVOs = taskManageService.queryTaskByPage(taskFilter);
-            requirementVO.setTaskVOs((taskVOs == null) ? null :taskVOs.getData());
-            requirementVOList.add(requirementVO);
-        }
-        res.setData(requirementVOList);
-        return res;
+        return new PageVO<RequirementDTO>(pageSize, pageNum, totalCount, requirementDTOList);
     }
+
 
     @Override
     public RequirementDO getRequirementByName(String name) {
         return requirementMapper.getRequirementByName(name);
     }
 
-
-    private TaskFilter buildTaskFilter(int requirementId) {
-        TaskFilter taskFilter = new TaskFilter();
-        taskFilter.setRequirementId(requirementId);
-        return taskFilter;
+    private RequirementDTO convertDO2DTO(RequirementDO requirementDO) {
+        RequirementDTO requirementDTO = new RequirementDTO();
+        BeanUtils.copyProperties(requirementDO, requirementDTO);
+        BusinessLineDO businessLineDO = businessLineMapper.findByBusinessLineId(requirementDO.getBusinessLineId());
+        requirementDTO.setBusinessLineName(businessLineDO.getName());
+        return requirementDTO;
     }
 }
