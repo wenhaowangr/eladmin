@@ -4,13 +4,12 @@ package me.zhengjie.modules.system.rest;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import me.zhengjie.modules.system.CheckUtils;
 import me.zhengjie.modules.system.domain.entity.*;
 import me.zhengjie.modules.system.domain.vo.PageVO;
 import me.zhengjie.modules.system.service.*;
+import me.zhengjie.modules.system.service.dto.BusinessLineDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,8 +30,8 @@ public class BusinessLineController {
 
     @ApiOperation("新增条线")
     @PostMapping(value = "/add")
-    public ResponseEntity<Object> addBusinessLine(@Validated @RequestBody BusinessLineDO businessLineDO){
-        int rowAffected = businessLineManageService.add(businessLineDO);
+    public ResponseEntity<Object> addBusinessLine(@Validated @RequestBody BusinessLineDTO businessLineDTO){
+        int rowAffected = businessLineManageService.add(businessLineDTO);
         if (rowAffected > 0){
             return new ResponseEntity<>(HttpStatus.OK);
         }
@@ -53,23 +52,20 @@ public class BusinessLineController {
     @GetMapping(value = "/query")
     public ResponseEntity<Object> queryBusinessLine(@ModelAttribute BusinessLineManageFilter filter) {
 
-        CheckUtils.checkMemberIds("成员ID格式错误!", filter.getMemberIds());
-        PageVO<BusinessLineDO> sprintDOPageVO = businessLineManageService.queryBusinessLineByPage(filter);
-        return new ResponseEntity<>(sprintDOPageVO, HttpStatus.OK);
+        PageVO<BusinessLineDTO> businessLineByPage = businessLineManageService.queryBusinessLineByPage(filter);
+        return new ResponseEntity<>(businessLineByPage, HttpStatus.OK);
     }
 
     @ApiOperation("编辑条线")
     @PostMapping(value = "/update")
-    public ResponseEntity<Object> updateBusinessLine(@RequestBody BusinessLineDO businessLineDO) {
+    public ResponseEntity<Object> updateBusinessLine(@RequestBody BusinessLineDTO businessLineDTO) {
 
-        CheckUtils.checkMemberIds("成员ID格式错误!", businessLineDO.getMemberIds());
-        int rowAffected = businessLineManageService.update(businessLineDO);
+        int rowAffected = businessLineManageService.update(businessLineDTO);
         if (rowAffected > 0) {
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
 
 
 }

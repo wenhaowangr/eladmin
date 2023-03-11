@@ -11,7 +11,7 @@
     <insert id="insertBusinessLine" useGeneratedKeys="true"
         keyProperty="id" parameterType="me.zhengjie.modules.system.domain.entity.BusinessLineDO">
         INSERT INTO tbl_sms_businessline_info (name, manager_id, member_ids, context, milestone, rec_crt_ts, rec_upd_ts)
-        VALUES (#{name}, #{manager_id}, #{member_ids}, #{context}, #{milestone}, current_timestamp , current_timestamp)
+        VALUES (#{name}, #{managerId}, #{memberIds}, #{context}, #{milestone}, current_timestamp , current_timestamp)
     </insert>
 
     <select id="findByBusinessLineName" resultMap="businessLineMap">

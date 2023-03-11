@@ -8,7 +8,7 @@ public class BusinessLineDO {
 
     private Integer id;
     private String name;
-    private String managerId;
+    private Integer managerId;
     private String memberIds;
     private String context;
     private String milestone;

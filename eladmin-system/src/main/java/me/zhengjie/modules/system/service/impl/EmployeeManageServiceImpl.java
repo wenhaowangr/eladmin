@@ -6,6 +6,7 @@ import me.zhengjie.modules.system.service.EmployeeManageService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 
 @Service
@@ -22,6 +23,11 @@ public class EmployeeManageServiceImpl implements EmployeeManageService {
     @Override
     public EmployeeDO getEmployeeById(int id) {
         return employeeMapper.getEmployeeById(id);
+    }
+
+    @Override
+    public List<EmployeeDO> getAllEmployee() {
+        return employeeMapper.getAllEmployee();
     }
 
 }

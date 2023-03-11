@@ -3,7 +3,9 @@ package me.zhengjie.modules.system.rest;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import me.zhengjie.modules.system.domain.entity.EmployeeDO;
 import me.zhengjie.modules.system.domain.vo.SprintVO;
+import me.zhengjie.modules.system.service.EmployeeManageService;
 import me.zhengjie.modules.system.service.SprintManageService;
 import me.zhengjie.utils.SecurityUtils;
 import org.springframework.http.HttpStatus;
@@ -24,6 +26,8 @@ public class HomeController {
 
     @Resource
     SprintManageService sprintManageService;
+    @Resource
+    EmployeeManageService employeeManageService;
 
     @ApiOperation("查询当前时间所在冲刺")
     @GetMapping(value = "/getCurSprint")
@@ -44,4 +48,13 @@ public class HomeController {
         String currentUsername = SecurityUtils.getCurrentUsername();
         return new ResponseEntity<>(sprintManageService.getMyCurTask(currentUsername), HttpStatus.OK);
     }
+
+
+    @ApiOperation("查询开发者")
+    @GetMapping(value = "/getAllEmployee")
+    public ResponseEntity<Object> getAllEmployee() {
+        return new ResponseEntity<>(employeeManageService.getAllEmployee(), HttpStatus.OK);
+    }
+
+
 }
