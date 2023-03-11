@@ -21,7 +21,7 @@ public class RequirementManageController {
     RequirementManageService requirementManageService;
 
     @ApiOperation("查询需求")
-    @GetMapping(value = "/queryRequirement")
+    @GetMapping(value = "/query")
     public ResponseEntity<Object> queryRequirement(@ModelAttribute RequirementManageFilter requirementManageFilter) {
 
         PageVO<RequirementDTO> requirementVOPageVO = requirementManageService.queryRequirement(requirementManageFilter);
