@@ -1,7 +1,7 @@
 package me.zhengjie.modules.system.domain.entity;
 
 import lombok.Data;
-import me.zhengjie.modules.system.domain.vo.TaskDTO;
+import me.zhengjie.modules.system.service.dto.TaskDTO;
 
 @Data
 public class WorkLoadDO {

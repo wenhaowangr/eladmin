@@ -1,13 +1,17 @@
 package me.zhengjie.modules.system.service.impl;
 
+import me.zhengjie.exception.BizException;
+import me.zhengjie.modules.system.TaskStateEnum;
 import me.zhengjie.modules.system.dao.mapper.*;
 import me.zhengjie.modules.system.domain.entity.*;
 import me.zhengjie.modules.system.domain.vo.PageVO;
 import me.zhengjie.modules.system.domain.vo.TaskVO;
 import me.zhengjie.modules.system.service.*;
+import me.zhengjie.modules.system.service.dto.TaskDTO;
 import me.zhengjie.modules.system.utils.FileUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,18 +28,20 @@ public class TaskManageServiceImpl implements TaskManageService {
     TaskMapper taskMapper;
     @Resource
     TaskUploadService taskUploadService;
+    @Resource
+    WorkloadService workloadService;
 
     private static SimpleDateFormat yyyyMMdd = new SimpleDateFormat("yyyyMMdd");
 
     @Override
     public PageVO<TaskVO> queryTaskByPage(TaskFilter filter) {
-
-        List<TaskVO> taskVOList = taskMapper.queryTaskByPage(filter);
-
         Integer pageNum = filter.getPageNum();
         Integer pageSize = filter.getPageSize();
         Integer taskTotalCount = taskMapper.queryTaskTotalCount(filter);
-
+        if (taskTotalCount == 0) {
+            return new PageVO<>(pageSize, pageNum, taskTotalCount, new ArrayList<>());
+        }
+        List<TaskVO> taskVOList = taskMapper.queryTaskByPage(filter);
         return new PageVO<>(pageSize, pageNum, taskTotalCount, taskVOList);
     }
 
@@ -126,7 +132,7 @@ public class TaskManageServiceImpl implements TaskManageService {
             map.put("任务详细描述", taskVO.getDescription());
             map.put("开发者", taskVO.getDevEmployeeName());
             map.put("工作量", taskVO.getWorkload());
-            map.put("状态", taskVO.getStatus());
+            map.put("状态", TaskStateEnum.getNameByCode(taskVO.getStatus()));
             map.put("冲刺", taskVO.getSprintName());
             map.put("优先级", taskVO.getPriority());
             map.put("DUE", yyyyMMdd.format(taskVO.getDueDate()));
@@ -138,6 +144,7 @@ public class TaskManageServiceImpl implements TaskManageService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Map<Integer, String> upload(MultipartFile file) {
 
         Map<Integer, List<String>> excelInfo = FileUtils.readExcel(file);
@@ -156,10 +163,15 @@ public class TaskManageServiceImpl implements TaskManageService {
          * 4. 构建TaskDO insert
          */
 
-        List<TaskDO> taskDOList = taskUploadService.excel2TaskDOList(excelInfo, resultMap);
+        List<TaskDTO> taskDTOList = taskUploadService.excel2TaskDOList(excelInfo, resultMap);
         if (MapUtils.isEmpty(resultMap)) {
-            for (TaskDO taskDO : taskDOList) {
+            for (TaskDTO taskDTO : taskDTOList) {
+                // 写入任务表
+                TaskDO taskDO = new TaskDO(taskDTO);
                 add(taskDO);
+                taskDTO.setId(taskDO.getId());
+                // 写入workload表
+                workloadService.addRWWorkLoad(taskDTO);
             }
         }
         return resultMap;

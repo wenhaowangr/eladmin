@@ -1,11 +1,13 @@
 package me.zhengjie.modules.system.domain.entity;
 
 import lombok.Data;
-import me.zhengjie.modules.system.domain.vo.TaskDTO;
+import lombok.experimental.SuperBuilder;
+import me.zhengjie.modules.system.service.dto.TaskDTO;
 
 import java.util.Date;
 
 @Data
+@SuperBuilder
 public class TaskDO {
 
     private Integer id;

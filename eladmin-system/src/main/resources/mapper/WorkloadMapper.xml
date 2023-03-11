@@ -23,7 +23,6 @@
             workload = #{workLoad},
             quarter = #{quarter},
             rec_upd_ts = current_timestamp
-
     </insert>
     <select id="findRWWorkLoadByTaskId" resultType="me.zhengjie.modules.system.domain.entity.WorkLoadDO">
         SELECT * FROM tbl_sms_task_workload_info WHERE task_id = #{taskId} AND state = 0

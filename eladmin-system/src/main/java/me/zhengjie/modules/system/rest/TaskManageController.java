@@ -6,7 +6,7 @@ import me.zhengjie.modules.system.dao.mapper.WorkloadMapper;
 import me.zhengjie.modules.system.domain.entity.TaskDO;
 import me.zhengjie.modules.system.domain.entity.TaskFilter;
 import me.zhengjie.modules.system.domain.vo.PageVO;
-import me.zhengjie.modules.system.domain.vo.TaskDTO;
+import me.zhengjie.modules.system.service.dto.TaskDTO;
 import me.zhengjie.modules.system.domain.vo.TaskVO;
 import me.zhengjie.modules.system.service.TaskManageService;
 import me.zhengjie.modules.system.service.WorkloadService;
@@ -37,8 +37,8 @@ public class TaskManageController {
 
 
     @ApiOperation("查询任务")
-    @GetMapping(value = "/query")
-    public ResponseEntity<Object> queryTask(@ModelAttribute TaskFilter filter) {
+    @PostMapping(value = "/query")
+    public ResponseEntity<Object> queryTask(@RequestBody TaskFilter filter) {
         PageVO<TaskVO> taskDOPageVO = taskManageService.queryTaskByPage(filter);
         return new ResponseEntity<>(taskDOPageVO, HttpStatus.OK);
     }
@@ -47,32 +47,26 @@ public class TaskManageController {
     @PostMapping(value = "/update")
     public ResponseEntity<Object> updateTask(@RequestBody TaskDTO taskDTO) {
         TaskDO taskDO = new TaskDO(taskDTO);
-        int rowAffected = taskManageService.update(taskDO);
-        if (taskDTO.getWorkload()!=null && taskDTO.getWorkload()!=0
-                && taskDTO.getDevEmployeeId()!=null && taskDTO.getDevEmployeeId()!=0
-                && taskDTO.getSprintId()!=null && taskDTO.getSprintId()!=0){
-            int workloadRowAffected = workloadService.addRWWorkLoad(taskDTO);
-        } else if (workloadMapper.findRWWorkLoadByTaskId(taskDTO.getId()) != null){
-            workloadService.deleteRWWorkLoad(taskDTO.getId());
+        try {
+            taskManageService.update(taskDO);
+            workloadService.addRWWorkLoad(taskDTO);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @ApiOperation("新增任务")
     @PostMapping(value = "/add")
     public ResponseEntity<Object> addTask(@RequestBody TaskDTO taskDTO) {
         TaskDO taskDO = new TaskDO(taskDTO);
-        int taskAffected = taskManageService.add(taskDO);
-        if ( taskAffected > 0){
+        try {
+            taskManageService.add(taskDO);
             int taskId = taskDO.getId();
             taskDTO.setId(taskId);
-            if (taskDTO.getWorkload()!=null && taskDTO.getWorkload()!=0
-                    && taskDTO.getDevEmployeeId()!=null && taskDTO.getDevEmployeeId()!=0
-                    && taskDTO.getSprintId()!=null && taskDTO.getSprintId()!=0){
-                int workloadRowAffected = workloadService.addRWWorkLoad(taskDTO);
-            }
+            workloadService.addRWWorkLoad(taskDTO);
             return new ResponseEntity<>(HttpStatus.OK);
-        } else{
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -80,8 +74,8 @@ public class TaskManageController {
     @ApiOperation("删除任务")
     @PostMapping(value = "/delete")
     public ResponseEntity<Object> deleteTask(@RequestBody int id) {
-        int rowAffected = taskManageService.delete(id);
-        if (workloadMapper.findRWWorkLoadByTaskId(id) != null){
+        taskManageService.delete(id);
+        if (workloadMapper.findRWWorkLoadByTaskId(id) != null) {
             workloadService.deleteRWWorkLoad(id);
         }
         return new ResponseEntity<>(HttpStatus.OK);
@@ -92,7 +86,6 @@ public class TaskManageController {
     @GetMapping(value = "/download")
     public void downloadTask(HttpServletResponse response, @ModelAttribute TaskFilter filter) throws IOException {
 
-        filter.setDefaultPage();
         PageVO<TaskVO> res = taskManageService.queryTaskByPage(filter);
         List<TaskVO> taskVOList = res.getData();
         taskManageService.download(taskVOList, response);
