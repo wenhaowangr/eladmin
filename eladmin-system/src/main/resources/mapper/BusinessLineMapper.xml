@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="me.zhengjie.modules.system.dao.BusinessLineMapper">
+<mapper namespace="com.unionpay.modules.system.dao.BusinessLineMapper">
 
-    <resultMap id="businessLineMap" type="me.zhengjie.modules.system.entity.BusinessLineDO">
+    <resultMap id="businessLineMap" type="com.unionpay.modules.system.entity.BusinessLineDO">
         <result property="managerId" column="manager_id"/>
         <result property="memberIds" column="member_ids"/>
     </resultMap>
 
     <insert id="insertBusinessLine" useGeneratedKeys="true"
-        keyProperty="id" parameterType="me.zhengjie.modules.system.entity.BusinessLineDO">
+        keyProperty="id" parameterType="com.unionpay.modules.system.entity.BusinessLineDO">
         INSERT INTO tbl_sms_businessline_info (name, manager_id, member_ids, context, milestone, rec_crt_ts, rec_upd_ts)
         VALUES (#{name}, #{managerId}, #{memberIds}, #{context}, #{milestone}, current_timestamp , current_timestamp)
     </insert>

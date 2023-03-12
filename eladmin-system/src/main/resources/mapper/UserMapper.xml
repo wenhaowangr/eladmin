@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="me.zhengjie.modules.system.dao.UserMapperV2">
+<mapper namespace="com.unionpay.modules.system.dao.UserMapperV2">
 
 
-    <select id="findAllUser" resultType="me.zhengjie.modules.system.entity.UserDO">
+    <select id="findAllUser" resultType="com.unionpay.modules.system.entity.UserDO">
         select * from sys_user where state = 0;
     </select>
 
-    <select id="findByUsername" resultType="me.zhengjie.modules.system.entity.UserDO">
+    <select id="findByUsername" resultType="com.unionpay.modules.system.entity.UserDO">
         select * from sys_user where username = #{username} and state = 0;
     </select>
 
-    <select id="findByEmail" resultType="me.zhengjie.modules.system.entity.UserDO">
+    <select id="findByEmail" resultType="com.unionpay.modules.system.entity.UserDO">
         select * from sys_user where email = #{email} and state = 0;
     </select>
 
-    <select id="findByPhone" resultType="me.zhengjie.modules.system.entity.UserDO">
+    <select id="findByPhone" resultType="com.unionpay.modules.system.entity.UserDO">
         select * from sys_user where phone = #{phone};
     </select>
 
-    <insert id="insertUser" parameterType="me.zhengjie.modules.system.entity.UserDO">
+    <insert id="insertUser" parameterType="com.unionpay.modules.system.entity.UserDO">
         INSERT INTO sys_user (dept_id, username, nick_name, gender, phone, email, password, is_admin, enabled, create_time, update_time)
         VALUES (#{deptId}, #{username}, #{nickName}, #{gender}, #{phone}, #{email}, #{password}, #{isAdmin}, #{enabled}, current_timestamp , current_timestamp)
     </insert>

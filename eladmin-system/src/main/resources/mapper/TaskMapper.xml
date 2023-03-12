@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="me.zhengjie.modules.system.dao.TaskMapper">
+<mapper namespace="com.unionpay.modules.system.dao.TaskMapper">
 
-    <resultMap id="taskMap" type="me.zhengjie.modules.system.entity.TaskDO">
+    <resultMap id="taskMap" type="com.unionpay.modules.system.entity.TaskDO">
         <result property="businessLineId" column="businessLine_id"/>
         <result property="requirementId" column="requirement_id"/>
         <result property="sprintId" column="sprint_id"/>
@@ -11,12 +11,12 @@
         <result property="dueDate" column="due_date"/>
     </resultMap>
 
-    <resultMap id="taskVOMap" type="me.zhengjie.modules.system.service.vo.TaskVO">
+    <resultMap id="taskVOMap" type="com.unionpay.modules.system.service.vo.TaskVO">
         <result property="dueDate" column="due_date"/>
     </resultMap>
 
     <insert id="insertTask" useGeneratedKeys="true"
-            keyProperty="id" parameterType="me.zhengjie.modules.system.entity.TaskDO">
+            keyProperty="id" parameterType="com.unionpay.modules.system.entity.TaskDO">
         INSERT INTO tbl_sms_task_info
         (name,
         businessLine_id,
@@ -211,7 +211,7 @@
     </select>
 
     <select id="queryWorkloadOfTaskBySprintIds"
-            resultType="me.zhengjie.modules.system.entity.TaskInfoDO">
+            resultType="com.unionpay.modules.system.entity.TaskInfoDO">
         SELECT
         t.id as id,
         t.name as name,
@@ -236,7 +236,7 @@
         AND t.state = 0 AND w.state = 0 AND e.state = 0
     </select>
 
-    <select id="queryTaskById" resultType="me.zhengjie.modules.system.entity.TaskDO">
+    <select id="queryTaskById" resultType="com.unionpay.modules.system.entity.TaskDO">
         select * from tbl_sms_task_info
         WHERE id = #{id} and state = 0
     </select>
