@@ -11,5 +11,7 @@ public interface EmployeeMapper {
 
     EmployeeDO getEmployeeById(int id);
 
+    EmployeeDO getEmployeeByUserId(long userId);
+
     List<EmployeeDO> getAllEmployee();
 }

@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import me.zhengjie.exception.BizException;
 import me.zhengjie.exception.EntityNotFoundException;
 import me.zhengjie.modules.system.CheckUtils;
+import me.zhengjie.modules.system.dao.mapper.EmployeeMapper;
 import me.zhengjie.modules.system.dao.mapper.SprintMapper;
 import me.zhengjie.modules.system.domain.User;
 import me.zhengjie.modules.system.domain.entity.EmployeeDO;
@@ -11,7 +12,6 @@ import me.zhengjie.modules.system.domain.entity.SprintDO;
 import me.zhengjie.modules.system.domain.entity.SprintManageFilter;
 import me.zhengjie.modules.system.domain.entity.TaskFilter;
 import me.zhengjie.modules.system.domain.vo.*;
-import me.zhengjie.modules.system.service.EmployeeManageService;
 import me.zhengjie.modules.system.service.SprintManageService;
 import me.zhengjie.modules.system.service.TaskManageService;
 import org.springframework.stereotype.Service;
@@ -32,7 +32,7 @@ public class SprintManageServiceImpl implements SprintManageService {
     TaskManageService taskManageService;
 
     @Resource
-    EmployeeManageService employeeManageService;
+    EmployeeMapper employeeMapper;
 
     @Override
     public int add(SprintDO sprintDO) {
@@ -101,8 +101,7 @@ public class SprintManageServiceImpl implements SprintManageService {
     // 查询指定日期的冲刺id，如果该日期没有任何冲刺，则返回0
     @Override
     public SprintDO getSprintByDate(Date date) {
-        SprintDO sprintDO = sprintMapper.getSprintByDate(date);
-        return sprintDO;
+        return sprintMapper.getSprintByDate(date);
     }
 
     @Override
@@ -118,17 +117,16 @@ public class SprintManageServiceImpl implements SprintManageService {
         }
 
         // 2.根据冲刺ID查询所有任务
-        HashSet<String> requirementNameList = new HashSet<>();
+        HashSet<String> requirementSet = new HashSet<>();
         for (SprintDO sprintDO : sprintDOList) {
-
             SprintVO sprintVO = new SprintVO(sprintDO);
             // 根据冲刺ID查询任务
             TaskFilter taskFilter = buildTaskFilter(sprintDO.getId());
             PageVO<TaskVO> taskVOs = taskManageService.queryTaskByPage(taskFilter);
             for (TaskVO taskVO : taskVOs.getData()) {
-                requirementNameList.add(taskVO.getRequirementName());
+                requirementSet.add(taskVO.getRequirementName());
             }
-            sprintVO.setRequirementNameList(requirementNameList);
+            sprintVO.setRequirementNameList(new ArrayList<>(requirementSet));
             res.add(sprintVO);
         }
         return res;
@@ -136,10 +134,10 @@ public class SprintManageServiceImpl implements SprintManageService {
 
 
     @Override
-    public List<MyCurTaskVO> getMyCurTask(String username) {
+    public List<MyCurTaskVO> getMyCurTask(Long userId) {
 
         List<MyCurTaskVO> res = new ArrayList<MyCurTaskVO>();
-        EmployeeDO employeeDO = employeeManageService.getEmployeeByName(username);
+        EmployeeDO employeeDO = employeeMapper.getEmployeeByUserId(userId);
         if (employeeDO == null) {
             return res;
         }
@@ -163,6 +161,16 @@ public class SprintManageServiceImpl implements SprintManageService {
     @Override
     public SprintDO getSprintByName(String name) {
         return sprintMapper.getSprintByName(name);
+    }
+
+    @Override
+    public List<SprintVO> getAllSprint() {
+        List<SprintDO> allSprint = sprintMapper.findAllSprint();
+        List<SprintVO> allSprintVO = new ArrayList<>();
+        allSprint.forEach((sprintDO)->{
+            allSprintVO.add(new SprintVO(sprintDO));
+        });
+        return allSprintVO;
     }
 
     private TaskFilter buildTaskFilter(int sprintId) {

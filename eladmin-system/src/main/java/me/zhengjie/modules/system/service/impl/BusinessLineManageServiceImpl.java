@@ -5,21 +5,25 @@ import com.google.common.collect.Lists;
 import me.zhengjie.exception.EntityExistException;
 import me.zhengjie.exception.EntityNotFoundException;
 import me.zhengjie.modules.system.CheckUtils;
+import me.zhengjie.modules.system.ReqStatusEnum;
 import me.zhengjie.modules.system.dao.mapper.BusinessLineMapper;
 import me.zhengjie.modules.system.dao.mapper.EmployeeMapper;
+import me.zhengjie.modules.system.dao.mapper.RequirementMapper;
 import me.zhengjie.modules.system.domain.entity.BusinessLineDO;
 import me.zhengjie.modules.system.domain.entity.BusinessLineManageFilter;
+import me.zhengjie.modules.system.domain.entity.RequirementDO;
+import me.zhengjie.modules.system.domain.vo.BusinessLineVO;
 import me.zhengjie.modules.system.domain.vo.PageVO;
 import me.zhengjie.modules.system.service.BusinessLineManageService;
 import me.zhengjie.modules.system.service.dto.BusinessLineDTO;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -31,10 +35,11 @@ public class BusinessLineManageServiceImpl implements BusinessLineManageService 
     @Resource
     private EmployeeMapper employeeMapper;
 
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public int add(BusinessLineDTO businessLineDTO) {
+    @Resource
+    private RequirementMapper requirementMapper;
 
+    @Override
+    public int add(BusinessLineDTO businessLineDTO) {
         // 必填校验
         CheckUtils.checkNonNullWithMsg("入参校验失败!", businessLineDTO, businessLineDTO.getName(), businessLineDTO.getManagerId(),
                 businessLineDTO.getContext(), businessLineDTO.getMilestone());
@@ -47,7 +52,6 @@ public class BusinessLineManageServiceImpl implements BusinessLineManageService 
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public int delete(int id) {
         if (businessLineMapper.findByBusinessLineId(id) == null){
             throw new EntityNotFoundException(BusinessLineDTO.class, "BusinessLineId", String.valueOf(id));
@@ -63,7 +67,6 @@ public class BusinessLineManageServiceImpl implements BusinessLineManageService 
 
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public PageVO<BusinessLineDTO> queryBusinessLineByPage(BusinessLineManageFilter businessLineManageFilter) {
 
         CheckUtils.checkNonNullWithMsg("查询对象为空！", businessLineManageFilter);
@@ -99,7 +102,6 @@ public class BusinessLineManageServiceImpl implements BusinessLineManageService 
 
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public int update(BusinessLineDTO businessLineDTO) {
 
         // 必填校验
@@ -120,6 +122,31 @@ public class BusinessLineManageServiceImpl implements BusinessLineManageService 
     @Override
     public BusinessLineDO getBusinessLineByName(String name) {
         return businessLineMapper.getBusinessLineByName(name);
+    }
+
+    @Override
+    public List<BusinessLineVO> getAllBusinessLineAndReq() {
+        List<BusinessLineVO> businessLineVOList = new ArrayList<>();
+        List<BusinessLineDO> allBusinessLines = businessLineMapper.findAllBusinessLines();
+        allBusinessLines.forEach((businessLineDO) -> {
+            BusinessLineVO businessLineVO = new BusinessLineVO();
+            int businessLineId = businessLineDO.getId();
+            String businessLineName = businessLineDO.getName();
+            businessLineVO.setBusinessLineId(businessLineId);
+            businessLineVO.setBusinessLineName(businessLineName);
+            List<RequirementDO> allRequirementList = requirementMapper.queryReqByBusinessLineId(businessLineId);
+            List<RequirementDO> requirementDOList = allRequirementList.stream().filter((requirementDO) -> {
+                return requirementDO.getStatus() == ReqStatusEnum.DOING.getCode();
+            }).collect(Collectors.toList());
+            if (CollectionUtils.isNotEmpty(requirementDOList)) {
+                List<Integer> requirementIds = requirementDOList.stream().map(RequirementDO::getId).collect(Collectors.toList());
+                List<String> requirementNames = requirementDOList.stream().map(RequirementDO::getName).collect(Collectors.toList());
+                businessLineVO.setRequirementIds(requirementIds);
+                businessLineVO.setRequirementNames(requirementNames);
+            }
+            businessLineVOList.add(businessLineVO);
+        });
+        return businessLineVOList;
     }
 
 

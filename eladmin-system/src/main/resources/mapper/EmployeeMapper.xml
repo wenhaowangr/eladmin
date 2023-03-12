@@ -4,15 +4,18 @@
 <mapper namespace="me.zhengjie.modules.system.dao.mapper.EmployeeMapper">
 
     <select id="getEmployeeByName" resultType="me.zhengjie.modules.system.domain.entity.EmployeeDO">
-        SELECT id, name FROM tbl_sms_employee_info WHERE name = #{name} AND state = 0
+        SELECT id, name, user_id FROM tbl_sms_employee_info WHERE name = #{name} AND state = 0
     </select>
 
     <select id="getEmployeeById" resultType="me.zhengjie.modules.system.domain.entity.EmployeeDO">
-        SELECT id, name FROM tbl_sms_employee_info WHERE id = #{id} AND state = 0
+        SELECT id, name, user_id FROM tbl_sms_employee_info WHERE id = #{id} AND state = 0
     </select>
 
     <select id="getAllEmployee" resultType="me.zhengjie.modules.system.domain.entity.EmployeeDO">
-        SELECT id, name FROM tbl_sms_employee_info WHERE state = 0
+        SELECT id, name, user_id FROM tbl_sms_employee_info WHERE state = 0
+    </select>
+    <select id="getEmployeeByUserId" resultType="me.zhengjie.modules.system.domain.entity.EmployeeDO">
+        SELECT id, name, user_id FROM tbl_sms_employee_info WHERE user_id = #{userId} AND state = 0
     </select>
 
 </mapper>

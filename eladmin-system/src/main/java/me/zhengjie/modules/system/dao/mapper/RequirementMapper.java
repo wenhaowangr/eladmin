@@ -18,6 +18,7 @@ public interface RequirementMapper {
 
     Integer queryRequirementTotalCount(RequirementManageFilter filter);
 
-    Integer queryTotalCountByBusinessLineId(int businessLineId);
+    List<RequirementDO> queryReqByBusinessLineId(int businessLineId);
+
     RequirementDO getRequirementByName(String name);
 }

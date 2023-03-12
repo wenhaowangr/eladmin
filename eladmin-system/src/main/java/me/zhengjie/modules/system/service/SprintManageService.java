@@ -22,7 +22,10 @@ public interface SprintManageService {
 
     List<SprintVO> getSprintAndReq();
 
-    List<MyCurTaskVO> getMyCurTask(String username);
+    List<MyCurTaskVO> getMyCurTask(Long userId);
 
     SprintDO getSprintByName(String name);
+
+    List<SprintVO> getAllSprint();
+
 }

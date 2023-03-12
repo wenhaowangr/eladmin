@@ -93,5 +93,9 @@
         SELECT * FROM tbl_sms_sprint_info WHERE name =#{name} AND state = 0
     </select>
 
+    <select id="findAllSprint" resultType="me.zhengjie.modules.system.domain.entity.SprintDO">
+        SELECT * FROM tbl_sms_sprint_info WHERE state = 0
+    </select>
+
 
 </mapper>

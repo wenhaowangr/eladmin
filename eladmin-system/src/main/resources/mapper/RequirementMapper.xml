@@ -50,7 +50,7 @@
         <where>
             state = 0
             <if test="businessLineId!=null and businessLineId!='' and businessLineId!=0">
-                AND businessLine_Id = #{businessLineId}
+                AND businessLine_id = #{businessLineId}
             </if>
             <if test="requirementName!=null and requirementName!=''">
                 AND name like concat('%',#{requirementName},'%')
@@ -93,7 +93,7 @@
         <where>
             state = 0
             <if test="businessLineId!=null and businessLineId!='' and businessLineId!=0">
-                AND businessLine_Id = #{businessLineId}
+                AND businessLine_id = #{businessLineId}
             </if>
         </where>
         ) t1
@@ -103,6 +103,13 @@
         SELECT *
         FROM tbl_sms_requirement_info
         WHERE name = #{name}
+          AND state = 0
+    </select>
+
+    <select id="queryReqByBusinessLineId" resultMap="RequirementMap">
+        SELECT *
+        FROM tbl_sms_requirement_info
+        WHERE businessLine_id = #{businessLineId}
           AND state = 0
     </select>
 

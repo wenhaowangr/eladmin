@@ -29,6 +29,8 @@ public interface SprintMapper {
 
     SprintDO getSprintByName(String name);
 
+    List<SprintDO> findAllSprint();
+
 //    BusinessLineDO findBusinessLineById(@Param("id") int id);
 //
 //    List<BusinessLineDO> findAllBusinessLines();
