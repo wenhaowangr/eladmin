@@ -5,17 +5,16 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.unionpay</groupId>
-    <artifactId>eladmin</artifactId>
+    <artifactId>sms</artifactId>
     <packaging>pom</packaging>
     <version>2.6</version>
 
     <modules>
-        <module>eladmin-common</module>
-        <module>eladmin-system</module>
+        <module>sms-common</module>
+        <module>sms-system</module>
     </modules>
 
-    <name>ELADMIN 后台管理</name>
-    <url>https://eladmin.vip</url>
+    <name>SMS 项目管理</name>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
