@@ -1,7 +1,7 @@
 package me.zhengjie.modules.system.service.impl;
 
-import me.zhengjie.modules.system.dao.mapper.EmployeeMapper;
-import me.zhengjie.modules.system.domain.entity.EmployeeDO;
+import me.zhengjie.modules.system.dao.EmployeeMapper;
+import me.zhengjie.modules.system.entity.EmployeeDO;
 import me.zhengjie.modules.system.service.EmployeeManageService;
 import org.springframework.stereotype.Service;
 

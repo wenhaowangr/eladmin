@@ -2,10 +2,10 @@
 package me.zhengjie.modules.system.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import me.zhengjie.modules.system.dao.mapper.UserMapperV2;
+import me.zhengjie.modules.system.dao.UserMapperV2;
 import me.zhengjie.exception.EntityExistException;
 import me.zhengjie.exception.EntityNotFoundException;
-import me.zhengjie.modules.system.domain.entity.UserDO;
+import me.zhengjie.modules.system.entity.UserDO;
 import me.zhengjie.modules.system.service.UserService;
 import me.zhengjie.modules.system.service.dto.*;
 import org.springframework.cache.annotation.CacheConfig;

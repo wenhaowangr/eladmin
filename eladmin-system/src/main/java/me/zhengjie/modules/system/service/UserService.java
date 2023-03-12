@@ -1,7 +1,7 @@
 
 package me.zhengjie.modules.system.service;
 
-import me.zhengjie.modules.system.domain.entity.UserDO;
+import me.zhengjie.modules.system.entity.UserDO;
 import me.zhengjie.modules.system.service.dto.UserLoginDto;
 
 /**

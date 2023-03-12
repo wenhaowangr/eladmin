@@ -2,7 +2,7 @@ package me.zhengjie.modules.system.job;
 
 import lombok.extern.slf4j.Slf4j;
 import me.zhengjie.modules.system.enums.TaskStateEnum;
-import me.zhengjie.modules.system.domain.entity.SprintDO;
+import me.zhengjie.modules.system.entity.SprintDO;
 import me.zhengjie.modules.system.service.vo.TaskFilter;
 import me.zhengjie.modules.system.service.vo.PageVO;
 import me.zhengjie.modules.system.service.vo.TaskVO;

@@ -2,8 +2,8 @@ package me.zhengjie.modules.system.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import me.zhengjie.modules.system.service.dto.DevScoreDTO;
-import me.zhengjie.modules.system.domain.entity.DevScoreCriteria;
-import me.zhengjie.modules.system.domain.entity.TaskInfoDO;
+import me.zhengjie.modules.system.entity.DevScoreCriteria;
+import me.zhengjie.modules.system.entity.TaskInfoDO;
 import me.zhengjie.modules.system.service.ScoreManageService;
 import me.zhengjie.modules.system.service.TaskManageService;
 import org.springframework.beans.factory.annotation.Autowired;

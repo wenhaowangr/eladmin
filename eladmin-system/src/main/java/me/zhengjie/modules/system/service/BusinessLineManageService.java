@@ -1,6 +1,6 @@
 package me.zhengjie.modules.system.service;
 
-import me.zhengjie.modules.system.domain.entity.BusinessLineDO;
+import me.zhengjie.modules.system.entity.BusinessLineDO;
 import me.zhengjie.modules.system.service.vo.BusinessLineManageFilter;
 import me.zhengjie.modules.system.service.vo.BusinessLineVO;
 import me.zhengjie.modules.system.service.vo.PageVO;

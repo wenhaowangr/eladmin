@@ -1,12 +1,15 @@
 package me.zhengjie.modules.system.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import me.zhengjie.modules.system.entity.BusinessLineDO;
+import me.zhengjie.modules.system.entity.EmployeeDO;
+import me.zhengjie.modules.system.entity.RequirementDO;
+import me.zhengjie.modules.system.entity.SprintDO;
 import me.zhengjie.modules.system.enums.TaskStateEnum;
-import me.zhengjie.modules.system.dao.mapper.BusinessLineMapper;
-import me.zhengjie.modules.system.dao.mapper.EmployeeMapper;
-import me.zhengjie.modules.system.dao.mapper.RequirementMapper;
-import me.zhengjie.modules.system.dao.mapper.SprintMapper;
-import me.zhengjie.modules.system.domain.entity.*;
+import me.zhengjie.modules.system.dao.BusinessLineMapper;
+import me.zhengjie.modules.system.dao.EmployeeMapper;
+import me.zhengjie.modules.system.dao.RequirementMapper;
+import me.zhengjie.modules.system.dao.SprintMapper;
 import me.zhengjie.modules.system.service.vo.TaskVO;
 import me.zhengjie.modules.system.service.TaskUploadService;
 import me.zhengjie.modules.system.service.dto.TaskDTO;

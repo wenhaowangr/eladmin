@@ -3,7 +3,7 @@ package me.zhengjie.modules.system.controller;
 import com.alibaba.fastjson.JSON;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import me.zhengjie.modules.system.domain.entity.TaskDO;
+import me.zhengjie.modules.system.entity.TaskDO;
 import me.zhengjie.modules.system.service.vo.TaskFilter;
 import me.zhengjie.modules.system.service.vo.PageVO;
 import me.zhengjie.modules.system.service.dto.TaskDTO;

@@ -4,7 +4,7 @@ package me.zhengjie.modules.system.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import me.zhengjie.modules.system.domain.entity.UserDO;
+import me.zhengjie.modules.system.entity.UserDO;
 import me.zhengjie.modules.system.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

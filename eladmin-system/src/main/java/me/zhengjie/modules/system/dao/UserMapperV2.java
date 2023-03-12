@@ -1,6 +1,6 @@
-package me.zhengjie.modules.system.dao.mapper;
+package me.zhengjie.modules.system.dao;
 
-import me.zhengjie.modules.system.domain.entity.UserDO;
+import me.zhengjie.modules.system.entity.UserDO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

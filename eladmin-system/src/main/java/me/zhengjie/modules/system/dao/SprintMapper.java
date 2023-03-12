@@ -1,6 +1,6 @@
-package me.zhengjie.modules.system.dao.mapper;
+package me.zhengjie.modules.system.dao;
 
-import me.zhengjie.modules.system.domain.entity.SprintDO;
+import me.zhengjie.modules.system.entity.SprintDO;
 import me.zhengjie.modules.system.service.vo.SprintManageFilter;
 
 import java.util.Date;

@@ -1,6 +1,6 @@
 package me.zhengjie.modules.system.service;
 
-import me.zhengjie.modules.system.domain.entity.SprintDO;
+import me.zhengjie.modules.system.entity.SprintDO;
 import me.zhengjie.modules.system.service.vo.SprintManageFilter;
 import me.zhengjie.modules.system.service.vo.MyCurTaskVO;
 import me.zhengjie.modules.system.service.vo.PageVO;

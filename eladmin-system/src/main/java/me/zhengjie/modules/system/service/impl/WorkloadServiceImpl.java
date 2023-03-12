@@ -1,9 +1,9 @@
 package me.zhengjie.modules.system.service.impl;
 
 import me.zhengjie.modules.system.enums.WorkTypeEnum;
-import me.zhengjie.modules.system.dao.mapper.SprintMapper;
-import me.zhengjie.modules.system.dao.mapper.WorkloadMapper;
-import me.zhengjie.modules.system.domain.entity.WorkLoadDO;
+import me.zhengjie.modules.system.dao.SprintMapper;
+import me.zhengjie.modules.system.dao.WorkloadMapper;
+import me.zhengjie.modules.system.entity.WorkLoadDO;
 import me.zhengjie.modules.system.service.dto.TaskDTO;
 import me.zhengjie.modules.system.service.WorkloadService;
 import org.springframework.stereotype.Service;

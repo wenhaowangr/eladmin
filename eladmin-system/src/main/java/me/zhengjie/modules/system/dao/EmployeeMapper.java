@@ -1,6 +1,6 @@
-package me.zhengjie.modules.system.dao.mapper;
+package me.zhengjie.modules.system.dao;
 
-import me.zhengjie.modules.system.domain.entity.EmployeeDO;
+import me.zhengjie.modules.system.entity.EmployeeDO;
 
 import java.util.List;
 

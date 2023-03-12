@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="me.zhengjie.modules.system.dao.mapper.WorkloadMapper">
+<mapper namespace="me.zhengjie.modules.system.dao.WorkloadMapper">
 
-    <resultMap id="WorkloadMap" type="me.zhengjie.modules.system.domain.entity.WorkLoadDO">
+    <resultMap id="WorkloadMap" type="me.zhengjie.modules.system.entity.WorkLoadDO">
         <result property="businessLineId" column="businessLine_id"/>
         <result property="requirementId" column="requirement_id"/>
         <result property="sprintId" column="sprint_id"/>
@@ -11,7 +11,7 @@
     </resultMap>
 
     <insert id="insertRW" useGeneratedKeys="true"
-        keyProperty="id" parameterType="me.zhengjie.modules.system.domain.entity.TaskDO">
+        keyProperty="id" parameterType="me.zhengjie.modules.system.entity.TaskDO">
         INSERT INTO tbl_sms_task_workload_info
             (task_id, sprint_id, requirement_id, businessLine_id, dev_employee_id, workload, type, quarter, rec_crt_ts,rec_upd_ts)
         VALUES (#{taskId}, #{sprintId}, #{requirementId}, #{businessLineId}, #{devEmployeeId}, #{workLoad}, #{type}, #{quarter}, current_timestamp , current_timestamp)
@@ -24,7 +24,7 @@
             quarter = #{quarter},
             rec_upd_ts = current_timestamp
     </insert>
-    <select id="findRWWorkLoadByTaskId" resultType="me.zhengjie.modules.system.domain.entity.WorkLoadDO">
+    <select id="findRWWorkLoadByTaskId" resultType="me.zhengjie.modules.system.entity.WorkLoadDO">
         SELECT * FROM tbl_sms_task_workload_info WHERE task_id = #{taskId} AND state = 0
     </select>
 <!--    <update id="deleteRWWorkLoad">-->

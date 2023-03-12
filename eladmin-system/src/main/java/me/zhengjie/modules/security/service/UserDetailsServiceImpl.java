@@ -6,25 +6,18 @@ import lombok.extern.slf4j.Slf4j;
 import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.exception.EntityNotFoundException;
 import me.zhengjie.modules.security.service.dto.JwtUserDto;
-import me.zhengjie.modules.system.service.DataService;
-import me.zhengjie.modules.system.service.RoleService;
 import me.zhengjie.modules.system.service.UserService;
 import me.zhengjie.modules.system.service.dto.UserLoginDto;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-/**
- * @author Zheng Jie
- * @date 2018-11-22
- */
+
 @Slf4j
 @RequiredArgsConstructor
 @Service("userDetailsService")
 public class UserDetailsServiceImpl implements UserDetailsService {
     private final UserService userService;
-    private final RoleService roleService;
-    private final DataService dataService;
     private final UserCacheManager userCacheManager;
 
     @Override
@@ -46,8 +39,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 }
                 jwtUserDto = new JwtUserDto(
                         user,
-                        dataService.getDeptIds(user),
-                        roleService.mapToGrantedAuthorities(user)
+                        null,
+                        null
                 );
                 // 添加缓存数据
                 userCacheManager.addUserCache(username, jwtUserDto);

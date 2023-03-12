@@ -6,18 +6,10 @@ import me.zhengjie.modules.security.config.bean.SecurityProperties;
 import me.zhengjie.modules.security.service.dto.JwtUserDto;
 import me.zhengjie.modules.security.service.dto.OnlineUserDto;
 import me.zhengjie.utils.*;
-import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.*;
 
-/**
- * @author Zheng Jie
- * @date 2019年10月26日21:56:27
- */
 @Service
 @Slf4j
 public class OnlineUserService {
@@ -48,20 +40,6 @@ public class OnlineUserService {
             log.error(e.getMessage(),e);
         }
         redisUtils.set(properties.getOnlineKey() + token, onlineUserDto, properties.getTokenValidityInSeconds()/1000);
-    }
-
-    /**
-     * 查询全部数据
-     * @param filter /
-     * @param pageable /
-     * @return /
-     */
-    public Map<String,Object> getAll(String filter, Pageable pageable){
-        List<OnlineUserDto> onlineUserDtos = getAll(filter);
-        return PageUtil.toPage(
-                PageUtil.toPage(pageable.getPageNumber(),pageable.getPageSize(), onlineUserDtos),
-                onlineUserDtos.size()
-        );
     }
 
     /**
@@ -106,27 +84,6 @@ public class OnlineUserService {
     }
 
     /**
-     * 导出
-     * @param all /
-     * @param response /
-     * @throws IOException /
-     */
-    public void download(List<OnlineUserDto> all, HttpServletResponse response) throws IOException {
-        List<Map<String, Object>> list = new ArrayList<>();
-        for (OnlineUserDto user : all) {
-            Map<String,Object> map = new LinkedHashMap<>();
-            map.put("用户名", user.getUserName());
-            map.put("部门", user.getDept());
-            map.put("登录IP", user.getIp());
-            map.put("登录地点", user.getAddress());
-            map.put("浏览器", user.getBrowser());
-            map.put("登录日期", user.getLoginTime());
-            list.add(map);
-        }
-        FileUtil.downloadExcel(list, response);
-    }
-
-    /**
      * 查询用户
      * @param key /
      * @return /
@@ -160,18 +117,4 @@ public class OnlineUserService {
         }
     }
 
-    /**
-     * 根据用户名强退用户
-     * @param username /
-     */
-    @Async
-    public void kickOutForUsername(String username) throws Exception {
-        List<OnlineUserDto> onlineUsers = getAll(username);
-        for (OnlineUserDto onlineUser : onlineUsers) {
-            if (onlineUser.getUserName().equals(username)) {
-                String token =EncryptUtils.desDecrypt(onlineUser.getKey());
-                kickOut(token);
-            }
-        }
-    }
 }

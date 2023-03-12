@@ -2,7 +2,7 @@ package me.zhengjie.modules.system.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import me.zhengjie.modules.system.domain.entity.RequirementDO;
+import me.zhengjie.modules.system.entity.RequirementDO;
 import me.zhengjie.modules.system.service.vo.RequirementManageFilter;
 import me.zhengjie.modules.system.service.vo.PageVO;
 import me.zhengjie.modules.system.service.RequirementManageService;

@@ -1,18 +1,14 @@
 
 package me.zhengjie.utils;
 
-import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 import me.zhengjie.exception.BadRequestException;
-import me.zhengjie.utils.enums.DataScopeEnum;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import java.util.List;
 
 /**
  * 获取当前登录的用户
@@ -57,25 +53,4 @@ public class SecurityUtils {
         return new JSONObject(new JSONObject(userDetails).get("user")).get("id", Long.class);
     }
 
-    /**
-     * 获取当前用户的数据权限
-     * @return /
-     */
-    public static List<Long> getCurrentUserDataScope(){
-        UserDetails userDetails = getCurrentUser();
-        JSONArray array = JSONUtil.parseArray(new JSONObject(userDetails).get("dataScopes"));
-        return JSONUtil.toList(array,Long.class);
-    }
-
-    /**
-     * 获取数据权限级别
-     * @return 级别
-     */
-    public static String getDataScopeType() {
-        List<Long> dataScopes = getCurrentUserDataScope();
-        if(dataScopes.size() != 0){
-            return "";
-        }
-        return DataScopeEnum.ALL.getValue();
-    }
 }

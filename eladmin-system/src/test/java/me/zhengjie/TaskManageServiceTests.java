@@ -1,12 +1,11 @@
 package me.zhengjie;
 
 import com.google.common.collect.Lists;
-import me.zhengjie.modules.system.domain.entity.TaskDO;
-import me.zhengjie.modules.system.domain.entity.TaskInfoDO;
+import me.zhengjie.modules.system.entity.TaskDO;
+import me.zhengjie.modules.system.entity.TaskInfoDO;
 import me.zhengjie.modules.system.service.TaskManageService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 import java.util.Map;

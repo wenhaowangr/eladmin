@@ -1,9 +1,8 @@
 package me.zhengjie.modules.system.service.vo;
 
 import lombok.Data;
-import me.zhengjie.modules.system.domain.entity.SprintDO;
+import me.zhengjie.modules.system.entity.SprintDO;
 
-import java.util.HashSet;
 import java.util.List;
 
 @Data

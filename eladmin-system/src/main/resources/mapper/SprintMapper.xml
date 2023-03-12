@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="me.zhengjie.modules.system.dao.mapper.SprintMapper">
+<mapper namespace="me.zhengjie.modules.system.dao.SprintMapper">
 
-    <resultMap id="sprintMap" type="me.zhengjie.modules.system.domain.entity.SprintDO">
+    <resultMap id="sprintMap" type="me.zhengjie.modules.system.entity.SprintDO">
         <result property="beginDate" column="begin_date"/>
         <result property="endDate" column="end_date"/>
     </resultMap>
 
 
     <insert id="insertSprint"
-        keyProperty="id" parameterType="me.zhengjie.modules.system.domain.entity.SprintDO">
+        keyProperty="id" parameterType="me.zhengjie.modules.system.entity.SprintDO">
         INSERT INTO tbl_sms_sprint_info (name, begin_date, end_date, quarter, rec_crt_ts, rec_upd_ts)
         VALUES (#{name}, #{beginDate}, #{endDate}, #{quarter}, current_timestamp , current_timestamp)
     </insert>
@@ -93,7 +93,7 @@
         SELECT * FROM tbl_sms_sprint_info WHERE name =#{name} AND state = 0
     </select>
 
-    <select id="findAllSprint" resultType="me.zhengjie.modules.system.domain.entity.SprintDO">
+    <select id="findAllSprint" resultType="me.zhengjie.modules.system.entity.SprintDO">
         SELECT * FROM tbl_sms_sprint_info WHERE state = 0
     </select>
 

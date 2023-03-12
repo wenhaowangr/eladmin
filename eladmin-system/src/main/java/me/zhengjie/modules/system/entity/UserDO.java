@@ -1,4 +1,4 @@
-package me.zhengjie.modules.system.domain.entity;
+package me.zhengjie.modules.system.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;

@@ -4,7 +4,7 @@ package me.zhengjie.modules.system.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import me.zhengjie.modules.system.domain.entity.SprintDO;
+import me.zhengjie.modules.system.entity.SprintDO;
 import me.zhengjie.modules.system.service.vo.SprintManageFilter;
 import me.zhengjie.modules.system.service.vo.PageVO;
 import me.zhengjie.modules.system.service.SprintManageService;

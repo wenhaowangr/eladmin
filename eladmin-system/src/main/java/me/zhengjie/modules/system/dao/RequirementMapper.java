@@ -1,6 +1,6 @@
-package me.zhengjie.modules.system.dao.mapper;
+package me.zhengjie.modules.system.dao;
 
-import me.zhengjie.modules.system.domain.entity.RequirementDO;
+import me.zhengjie.modules.system.entity.RequirementDO;
 import me.zhengjie.modules.system.service.vo.RequirementManageFilter;
 
 import java.util.List;

@@ -3,7 +3,7 @@ package me.zhengjie.modules.system.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import me.zhengjie.modules.system.service.dto.DevScoreDTO;
-import me.zhengjie.modules.system.domain.entity.DevScoreCriteria;
+import me.zhengjie.modules.system.entity.DevScoreCriteria;
 import me.zhengjie.modules.system.service.ScoreManageService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

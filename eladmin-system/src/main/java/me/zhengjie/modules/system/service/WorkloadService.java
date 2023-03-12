@@ -1,6 +1,6 @@
 package me.zhengjie.modules.system.service;
 
-import me.zhengjie.modules.system.domain.entity.WorkLoadDO;
+import me.zhengjie.modules.system.entity.WorkLoadDO;
 import me.zhengjie.modules.system.service.dto.TaskDTO;
 
 public interface WorkloadService {

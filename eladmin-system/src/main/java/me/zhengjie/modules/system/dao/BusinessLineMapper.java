@@ -1,6 +1,6 @@
-package me.zhengjie.modules.system.dao.mapper;
+package me.zhengjie.modules.system.dao;
 
-import me.zhengjie.modules.system.domain.entity.BusinessLineDO;
+import me.zhengjie.modules.system.entity.BusinessLineDO;
 import me.zhengjie.modules.system.service.vo.BusinessLineManageFilter;
 
 import java.util.List;

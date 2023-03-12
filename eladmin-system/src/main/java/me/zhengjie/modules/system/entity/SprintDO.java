@@ -1,4 +1,4 @@
-package me.zhengjie.modules.system.domain.entity;
+package me.zhengjie.modules.system.entity;
 
 import lombok.Data;
 
