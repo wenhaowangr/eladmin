@@ -6,7 +6,6 @@ import me.zhengjie.exception.EntityNotFoundException;
 import me.zhengjie.modules.system.utils.CheckUtils;
 import me.zhengjie.modules.system.dao.mapper.EmployeeMapper;
 import me.zhengjie.modules.system.dao.mapper.SprintMapper;
-import me.zhengjie.modules.system.domain.User;
 import me.zhengjie.modules.system.domain.entity.EmployeeDO;
 import me.zhengjie.modules.system.domain.entity.SprintDO;
 import me.zhengjie.modules.system.service.vo.SprintManageFilter;
@@ -60,7 +59,7 @@ public class SprintManageServiceImpl implements SprintManageService {
     @Override
     public int delete(int id) {
         if (sprintMapper.findBySprintId(id) == null) {
-            throw new EntityNotFoundException(User.class, "SprintId", String.valueOf(id));
+            throw new EntityNotFoundException(SprintDO.class, "SprintId", String.valueOf(id));
         }
         return sprintMapper.deleteSprint(id);
     }

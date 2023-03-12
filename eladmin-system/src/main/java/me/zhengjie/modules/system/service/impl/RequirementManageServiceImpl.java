@@ -7,7 +7,6 @@ import me.zhengjie.exception.EntityNotFoundException;
 import me.zhengjie.modules.system.utils.CheckUtils;
 import me.zhengjie.modules.system.dao.mapper.BusinessLineMapper;
 import me.zhengjie.modules.system.dao.mapper.RequirementMapper;
-import me.zhengjie.modules.system.domain.User;
 import me.zhengjie.modules.system.domain.entity.*;
 import me.zhengjie.modules.system.service.vo.PageVO;
 import me.zhengjie.modules.system.service.RequirementManageService;
@@ -82,7 +81,7 @@ public class RequirementManageServiceImpl implements RequirementManageService {
     @Transactional(rollbackFor = Exception.class)
     public int delete(int id) {
         if (requirementMapper.findByRequirementId(id) == null) {
-            throw new EntityNotFoundException(User.class, "RequirementId", String.valueOf(id));
+            throw new EntityNotFoundException(RequirementDTO.class, "RequirementId", String.valueOf(id));
         }
         List<TaskDO> taskDOList = taskManageService.queryTaskByRequirementId(id);
         taskDOList.forEach((taskDO -> {
