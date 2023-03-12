@@ -1,8 +1,8 @@
 package me.zhengjie.modules.system.rest;
 
+import com.alibaba.fastjson.JSON;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import me.zhengjie.modules.system.dao.mapper.WorkloadMapper;
 import me.zhengjie.modules.system.domain.entity.TaskDO;
 import me.zhengjie.modules.system.domain.entity.TaskFilter;
 import me.zhengjie.modules.system.domain.vo.PageVO;
@@ -72,6 +72,18 @@ public class TaskManageController {
     @PostMapping(value = "/delete")
     public ResponseEntity<Object> deleteTask(@RequestBody int id) {
         taskManageService.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @ApiOperation("批量删除任务")
+    @PostMapping(value = "/batchDelete")
+    public ResponseEntity<Object> deleteTask(@RequestBody String ids) {
+        List<Integer> taskIds = JSON.parseArray(ids, Integer.class);
+        try {
+            taskManageService.batchDelete(taskIds);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

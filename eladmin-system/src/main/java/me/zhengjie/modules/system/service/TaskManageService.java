@@ -20,6 +20,8 @@ public interface TaskManageService {
 
     int delete(int id);
 
+    void batchDelete(List<Integer> ids);
+
     List<TaskDO> findAllTask();
 
     int update(TaskDO taskDO);

@@ -100,15 +100,19 @@
 
     <select id="queryTaskByPage" resultMap="taskVOMap">
         SELECT b.name as businessLineName,
+        b.id as businessLineId,
         a.description,
         c.name as devEmployeeName,
+        c.id as devEmployeeId,
         a.due_date,
         a.id,
         a.name,
         a.priority,
         a.remark,
         d.name as requirementName,
+        d.id as requirementId,
         e.name as sprintName,
+        e.id as sprintId,
         a.status,
         a.story,
         f.workload as workload

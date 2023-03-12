@@ -8,9 +8,13 @@ public class TaskVO {
 
     private Integer id;
     private String name;
+    private Integer businessLineId;
     private String businessLineName;
+    private Integer requirementId;
     private String requirementName;
+    private Integer sprintId;
     private String sprintName;
+    private Integer devEmployeeId;
     private String devEmployeeName;
     private Date dueDate;
     private String story;

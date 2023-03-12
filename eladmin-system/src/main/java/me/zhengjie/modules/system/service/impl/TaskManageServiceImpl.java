@@ -93,8 +93,13 @@ public class TaskManageServiceImpl implements TaskManageService {
     }
 
     @Override
-    public List<TaskDO> findAllTask() {
+    @Transactional(rollbackFor = Exception.class)
+    public void batchDelete(List<Integer> taskIds) {
+        taskIds.forEach(this::delete);
+    }
 
+    @Override
+    public List<TaskDO> findAllTask() {
         return taskMapper.findAllTask();
     }
 
