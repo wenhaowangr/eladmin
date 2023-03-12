@@ -11,6 +11,6 @@ import org.mapstruct.ReportingPolicy;
  * @author Zheng Jie
  * @date 2018-11-23
  */
-@Mapper(componentModel = "spring",uses = {RoleMapper.class, DeptMapper.class, JobMapper.class},unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(componentModel = "spring",uses = {RoleMapper.class, DeptMapper.class},unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UserLoginMapper extends BaseMapper<UserLoginDto, User> {
 }

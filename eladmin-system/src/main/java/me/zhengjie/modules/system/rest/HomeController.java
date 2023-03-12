@@ -3,7 +3,7 @@ package me.zhengjie.modules.system.rest;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import me.zhengjie.modules.system.domain.vo.SprintVO;
+import me.zhengjie.modules.system.service.vo.SprintVO;
 import me.zhengjie.modules.system.service.BusinessLineManageService;
 import me.zhengjie.modules.system.service.EmployeeManageService;
 import me.zhengjie.modules.system.service.SprintManageService;

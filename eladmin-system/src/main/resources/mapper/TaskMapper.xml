@@ -11,7 +11,7 @@
         <result property="dueDate" column="due_date"/>
     </resultMap>
 
-    <resultMap id="taskVOMap" type="me.zhengjie.modules.system.domain.vo.TaskVO">
+    <resultMap id="taskVOMap" type="me.zhengjie.modules.system.service.vo.TaskVO">
         <result property="dueDate" column="due_date"/>
     </resultMap>
 

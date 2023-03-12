@@ -3,8 +3,8 @@ package me.zhengjie.modules.system.service;
 import me.zhengjie.modules.system.domain.entity.TaskDO;
 import me.zhengjie.modules.system.domain.entity.TaskFilter;
 import me.zhengjie.modules.system.domain.entity.TaskInfoDO;
-import me.zhengjie.modules.system.domain.vo.PageVO;
-import me.zhengjie.modules.system.domain.vo.TaskVO;
+import me.zhengjie.modules.system.service.vo.PageVO;
+import me.zhengjie.modules.system.service.vo.TaskVO;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;

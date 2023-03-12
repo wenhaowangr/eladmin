@@ -1,8 +1,7 @@
 package me.zhengjie.modules.system.dao.mapper;
 
 import me.zhengjie.modules.system.domain.entity.SprintDO;
-import me.zhengjie.modules.system.domain.entity.SprintManageFilter;
-import org.apache.ibatis.annotations.Param;
+import me.zhengjie.modules.system.service.vo.SprintManageFilter;
 
 import java.util.Date;
 import java.util.List;

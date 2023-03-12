@@ -5,13 +5,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import me.zhengjie.modules.system.domain.entity.SprintDO;
-import me.zhengjie.modules.system.domain.entity.SprintManageFilter;
-import me.zhengjie.modules.system.domain.vo.PageVO;
-import me.zhengjie.modules.system.service.*;
+import me.zhengjie.modules.system.service.vo.SprintManageFilter;
+import me.zhengjie.modules.system.service.vo.PageVO;
 import me.zhengjie.modules.system.service.SprintManageService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 

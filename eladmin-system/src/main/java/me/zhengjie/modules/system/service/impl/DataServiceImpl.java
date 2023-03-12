@@ -2,9 +2,7 @@
 package me.zhengjie.modules.system.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import me.zhengjie.modules.system.domain.Dept;
 import me.zhengjie.modules.system.service.DataService;
-import me.zhengjie.modules.system.service.DeptService;
 import me.zhengjie.modules.system.service.RoleService;
 import me.zhengjie.modules.system.service.dto.RoleSmallDto;
 import me.zhengjie.modules.system.service.dto.UserDto;
@@ -26,7 +24,6 @@ import java.util.*;
 public class DataServiceImpl implements DataService {
 
     private final RoleService roleService;
-    private final DeptService deptService;
 
     /**
      * 用户角色和用户部门改变时需清理缓存
@@ -64,14 +61,14 @@ public class DataServiceImpl implements DataService {
      * @return 数据权限ID
      */
     public Set<Long> getCustomize(Set<Long> deptIds, RoleSmallDto role){
-        Set<Dept> depts = deptService.findByRoleId(role.getId());
-        for (Dept dept : depts) {
-            deptIds.add(dept.getId());
-            List<Dept> deptChildren = deptService.findByPid(dept.getId());
-            if (deptChildren != null && deptChildren.size() != 0) {
-                deptIds.addAll(deptService.getDeptChildren(deptChildren));
-            }
-        }
-        return deptIds;
+//        Set<Dept> depts = deptService.findByRoleId(role.getId());
+//        for (Dept dept : depts) {
+//            deptIds.add(dept.getId());
+//            List<Dept> deptChildren = deptService.findByPid(dept.getId());
+//            if (deptChildren != null && deptChildren.size() != 0) {
+//                deptIds.addAll(deptService.getDeptChildren(deptChildren));
+//            }
+//        }
+        return null;
     }
 }

@@ -96,10 +96,10 @@ public class UserServiceImpl implements UserService {
             throw new EntityExistException(UserDO.class, "username", resources.getUsername());
         }
         if (userMapperV2.findByEmail(resources.getEmail()) != null) {
-            throw new EntityExistException(User.class, "email", resources.getEmail());
+            throw new EntityExistException(UserDO.class, "email", resources.getEmail());
         }
         if (userMapperV2.findByPhone(resources.getPhone()) != null) {
-            throw new EntityExistException(User.class, "phone", resources.getPhone());
+            throw new EntityExistException(UserDO.class, "phone", resources.getPhone());
         }
         userMapperV2.insertUser(resources);
     }
