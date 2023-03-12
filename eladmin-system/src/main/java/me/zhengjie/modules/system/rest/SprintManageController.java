@@ -41,6 +41,7 @@ public class SprintManageController {
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    /**
     @ApiOperation("删除冲刺")
     @PostMapping(value = "/delete")
     public ResponseEntity<Object> deleteSprint(@RequestBody int id) {
@@ -49,7 +50,7 @@ public class SprintManageController {
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    }*/
 
     @ApiOperation("查询冲刺")
     @GetMapping(value = "/query")

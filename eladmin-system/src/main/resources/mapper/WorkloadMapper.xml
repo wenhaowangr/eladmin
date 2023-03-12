@@ -31,7 +31,10 @@
 <!--        UPDATE tbl_sms_task_workload_info SET state =1 WHERE id = #{id} AND state = 0-->
 <!--    </update>-->
     <update id="deleteRWWorkLoad">
-        DELETE FROM tbl_sms_task_workload_info WHERE task_id = #{id} AND state = 0
+        UPDATE tbl_sms_task_workload_info
+        SET state = 1
+        WHERE task_id = #{id}
+          AND state = 0
     </update>
 
 

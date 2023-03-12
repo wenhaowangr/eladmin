@@ -11,9 +11,11 @@ import me.zhengjie.modules.system.domain.User;
 import me.zhengjie.modules.system.domain.entity.*;
 import me.zhengjie.modules.system.domain.vo.PageVO;
 import me.zhengjie.modules.system.service.RequirementManageService;
+import me.zhengjie.modules.system.service.TaskManageService;
 import me.zhengjie.modules.system.service.dto.RequirementDTO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -26,6 +28,8 @@ public class RequirementManageServiceImpl implements RequirementManageService {
     private RequirementMapper requirementMapper;
     @Resource
     private BusinessLineMapper businessLineMapper;
+    @Resource
+    private TaskManageService taskManageService;
 
 
     @Override
@@ -66,11 +70,23 @@ public class RequirementManageServiceImpl implements RequirementManageService {
     }
 
 
+    /**
+     * 删除需求
+     * 1. 删除任务(包括删除workload)
+     * 2. 删除需求
+     * @param id
+     * @return
+     */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int delete(int id) {
         if (requirementMapper.findByRequirementId(id) == null) {
             throw new EntityNotFoundException(User.class, "RequirementId", String.valueOf(id));
         }
+        List<TaskDO> taskDOList = taskManageService.queryTaskByRequirementId(id);
+        taskDOList.forEach((taskDO -> {
+            taskManageService.delete(taskDO.getId());
+        }));
         return requirementMapper.deleteRequirement(id);
     }
 

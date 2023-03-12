@@ -19,7 +19,7 @@ public class WorkloadServiceImpl implements WorkloadService {
     SprintMapper sprintMapper;
 
     @Override
-    public int addRWWorkLoad(TaskDTO taskDTO) {
+    public int addRWWorkload(TaskDTO taskDTO) {
         WorkLoadDO workloadDO = new WorkLoadDO(taskDTO);
         workloadDO.setType(WorkTypeEnum.RW.name());
         // 如果填了冲刺, 则获取其季度信息
@@ -30,8 +30,13 @@ public class WorkloadServiceImpl implements WorkloadService {
     }
 
     @Override
-    public int deleteRWWorkLoad(int id) {
+    public int deleteRWWorkload(int id) {
         return workloadMapper.deleteRWWorkLoad(id);
+    }
+
+    @Override
+    public WorkLoadDO queryWorkloadByTaskId(int taskId) {
+        return workloadMapper.findRWWorkLoadByTaskId(taskId);
     }
 
 }

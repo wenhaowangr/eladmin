@@ -32,9 +32,6 @@ public class TaskManageController {
     @Resource
     WorkloadService workloadService;
 
-    @Resource
-    WorkloadMapper workloadMapper;
-
 
     @ApiOperation("查询任务")
     @PostMapping(value = "/query")
@@ -49,7 +46,7 @@ public class TaskManageController {
         TaskDO taskDO = new TaskDO(taskDTO);
         try {
             taskManageService.update(taskDO);
-            workloadService.addRWWorkLoad(taskDTO);
+            workloadService.addRWWorkload(taskDTO);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -64,7 +61,7 @@ public class TaskManageController {
             taskManageService.add(taskDO);
             int taskId = taskDO.getId();
             taskDTO.setId(taskId);
-            workloadService.addRWWorkLoad(taskDTO);
+            workloadService.addRWWorkload(taskDTO);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -75,9 +72,6 @@ public class TaskManageController {
     @PostMapping(value = "/delete")
     public ResponseEntity<Object> deleteTask(@RequestBody int id) {
         taskManageService.delete(id);
-        if (workloadMapper.findRWWorkLoadByTaskId(id) != null) {
-            workloadService.deleteRWWorkLoad(id);
-        }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

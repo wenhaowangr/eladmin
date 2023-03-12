@@ -1,9 +1,11 @@
 package me.zhengjie.modules.system.service.impl;
 
 import me.zhengjie.exception.BizException;
+import me.zhengjie.exception.EntityNotFoundException;
 import me.zhengjie.modules.system.CheckUtils;
 import me.zhengjie.modules.system.TaskStateEnum;
 import me.zhengjie.modules.system.dao.mapper.*;
+import me.zhengjie.modules.system.domain.User;
 import me.zhengjie.modules.system.domain.entity.*;
 import me.zhengjie.modules.system.domain.vo.PageVO;
 import me.zhengjie.modules.system.domain.vo.TaskVO;
@@ -71,9 +73,22 @@ public class TaskManageServiceImpl implements TaskManageService {
         return taskMapper.insertTask(taskDO);
     }
 
+    /**
+     * 删除任务
+     * 1. 删除任务
+     * 2. 删除workload
+     * @param id
+     * @return
+     */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int delete(int id) {
-
+        if (taskMapper.queryTaskById(id) == null) {
+            throw new EntityNotFoundException(TaskDTO.class, "TaskId", String.valueOf(id));
+        }
+        if (workloadService.queryWorkloadByTaskId(id) != null) {
+            workloadService.deleteRWWorkload(id);
+        }
         return taskMapper.deleteTask(id);
     }
 
@@ -207,7 +222,7 @@ public class TaskManageServiceImpl implements TaskManageService {
                 add(taskDO);
                 taskDTO.setId(taskDO.getId());
                 // 写入workload表
-                workloadService.addRWWorkLoad(taskDTO);
+                workloadService.addRWWorkload(taskDTO);
             }
         }
         return resultMap;

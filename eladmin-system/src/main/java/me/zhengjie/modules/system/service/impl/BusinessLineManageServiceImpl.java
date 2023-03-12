@@ -15,10 +15,12 @@ import me.zhengjie.modules.system.domain.entity.RequirementDO;
 import me.zhengjie.modules.system.domain.vo.BusinessLineVO;
 import me.zhengjie.modules.system.domain.vo.PageVO;
 import me.zhengjie.modules.system.service.BusinessLineManageService;
+import me.zhengjie.modules.system.service.RequirementManageService;
 import me.zhengjie.modules.system.service.dto.BusinessLineDTO;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -38,6 +40,9 @@ public class BusinessLineManageServiceImpl implements BusinessLineManageService 
     @Resource
     private RequirementMapper requirementMapper;
 
+    @Resource
+    private RequirementManageService requirementManageService;
+
     @Override
     public int add(BusinessLineDTO businessLineDTO) {
         // 必填校验
@@ -51,11 +56,24 @@ public class BusinessLineManageServiceImpl implements BusinessLineManageService 
         return businessLineMapper.insertBusinessLine(convertDTO2DO(businessLineDTO));
     }
 
+    /**
+     * 删除条线
+     * 1. 删除条线
+     * 2. 删除需求(包括任务, 工作量)
+     *
+     * @param id
+     * @return
+     */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int delete(int id) {
-        if (businessLineMapper.findByBusinessLineId(id) == null){
+        if (businessLineMapper.findByBusinessLineId(id) == null) {
             throw new EntityNotFoundException(BusinessLineDTO.class, "BusinessLineId", String.valueOf(id));
         }
+        List<RequirementDO> requirementDOList = requirementMapper.queryReqByBusinessLineId(id);
+        requirementDOList.forEach((requirementDO) -> {
+            requirementManageService.delete(requirementDO.getId());
+        });
         return businessLineMapper.deleteBusinessLine(id);
     }
 
@@ -84,8 +102,7 @@ public class BusinessLineManageServiceImpl implements BusinessLineManageService 
         List<Integer> memberIds = businessLineManageFilter.getMemberIds();
         if (CollectionUtils.isEmpty(memberIds)) {
             businessLineDOList = allBusinessLineDOS;
-        }
-        else {
+        } else {
             for (BusinessLineDO businessLineDO : allBusinessLineDOS) {
                 List<Integer> ids = JSON.parseArray(businessLineDO.getMemberIds(), Integer.class);
                 if (ids.containsAll(memberIds)) {
