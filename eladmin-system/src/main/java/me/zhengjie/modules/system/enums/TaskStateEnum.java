@@ -1,4 +1,4 @@
-package me.zhengjie.modules.system;
+package me.zhengjie.modules.system.enums;
 
 import lombok.Getter;
 
@@ -11,11 +11,11 @@ public enum TaskStateEnum {
     YWC("已完成", 2, "已完成");
 
     @Getter
-    private String name;
+    private final String name;
     @Getter
-    private String desc;
+    private final String desc;
     @Getter
-    private int code;
+    private final int code;
 
     TaskStateEnum(String name, int code, String desc) {
         this.name = name;

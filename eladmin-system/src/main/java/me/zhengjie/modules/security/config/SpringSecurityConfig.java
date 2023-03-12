@@ -2,7 +2,6 @@
 package me.zhengjie.modules.security.config;
 
 import lombok.RequiredArgsConstructor;
-import me.zhengjie.annotation.AnonymousAccess;
 import me.zhengjie.modules.security.config.bean.SecurityProperties;
 import me.zhengjie.modules.security.security.*;
 import me.zhengjie.modules.security.service.OnlineUserService;
@@ -142,34 +141,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         Set<String> patch = new HashSet<>();
         Set<String> delete = new HashSet<>();
         Set<String> all = new HashSet<>();
-        for (Map.Entry<RequestMappingInfo, HandlerMethod> infoEntry : handlerMethodMap.entrySet()) {
-            HandlerMethod handlerMethod = infoEntry.getValue();
-            AnonymousAccess anonymousAccess = handlerMethod.getMethodAnnotation(AnonymousAccess.class);
-            if (null != anonymousAccess) {
-                List<RequestMethod> requestMethods = new ArrayList<>(infoEntry.getKey().getMethodsCondition().getMethods());
-                RequestMethodEnum request = RequestMethodEnum.find(requestMethods.size() == 0 ? RequestMethodEnum.ALL.getType() : requestMethods.get(0).name());
-                switch (Objects.requireNonNull(request)) {
-                    case GET:
-                        get.addAll(infoEntry.getKey().getPatternsCondition().getPatterns());
-                        break;
-                    case POST:
-                        post.addAll(infoEntry.getKey().getPatternsCondition().getPatterns());
-                        break;
-                    case PUT:
-                        put.addAll(infoEntry.getKey().getPatternsCondition().getPatterns());
-                        break;
-                    case PATCH:
-                        patch.addAll(infoEntry.getKey().getPatternsCondition().getPatterns());
-                        break;
-                    case DELETE:
-                        delete.addAll(infoEntry.getKey().getPatternsCondition().getPatterns());
-                        break;
-                    default:
-                        all.addAll(infoEntry.getKey().getPatternsCondition().getPatterns());
-                        break;
-                }
-            }
-        }
         anonymousUrls.put(RequestMethodEnum.GET.getType(), get);
         anonymousUrls.put(RequestMethodEnum.POST.getType(), post);
         anonymousUrls.put(RequestMethodEnum.PUT.getType(), put);

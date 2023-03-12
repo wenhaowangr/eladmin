@@ -1,4 +1,4 @@
-package me.zhengjie.modules.system.rest;
+package me.zhengjie.modules.system.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

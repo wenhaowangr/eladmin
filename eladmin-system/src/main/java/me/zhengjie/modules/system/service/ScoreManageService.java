@@ -1,6 +1,6 @@
 package me.zhengjie.modules.system.service;
 
-import me.zhengjie.modules.system.domain.DevScore;
+import me.zhengjie.modules.system.service.dto.DevScoreDTO;
 import me.zhengjie.modules.system.domain.entity.DevScoreCriteria;
 
 
@@ -15,6 +15,6 @@ public interface ScoreManageService {
      * @param criteria
      * @return
      */
-    List<DevScore> queryDevScore(DevScoreCriteria criteria);
+    List<DevScoreDTO> queryDevScore(DevScoreCriteria criteria);
 
 }

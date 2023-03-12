@@ -1,7 +1,7 @@
 package me.zhengjie.modules.system.dao.mapper;
 
 import me.zhengjie.modules.system.domain.entity.TaskDO;
-import me.zhengjie.modules.system.domain.entity.TaskFilter;
+import me.zhengjie.modules.system.service.vo.TaskFilter;
 import me.zhengjie.modules.system.domain.entity.TaskInfoDO;
 import me.zhengjie.modules.system.service.vo.TaskVO;
 import org.apache.ibatis.annotations.Param;

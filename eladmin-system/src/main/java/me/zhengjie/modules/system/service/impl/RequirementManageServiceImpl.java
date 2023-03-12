@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import me.zhengjie.exception.BizException;
 import me.zhengjie.exception.EntityExistException;
 import me.zhengjie.exception.EntityNotFoundException;
-import me.zhengjie.modules.system.CheckUtils;
+import me.zhengjie.modules.system.utils.CheckUtils;
 import me.zhengjie.modules.system.dao.mapper.BusinessLineMapper;
 import me.zhengjie.modules.system.dao.mapper.RequirementMapper;
 import me.zhengjie.modules.system.domain.User;

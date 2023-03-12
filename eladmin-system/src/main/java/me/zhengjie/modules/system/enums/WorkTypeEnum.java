@@ -1,4 +1,6 @@
-package me.zhengjie.modules.system;
+package me.zhengjie.modules.system.enums;
+
+import lombok.Getter;
 
 public enum WorkTypeEnum {
 
@@ -7,9 +9,12 @@ public enum WorkTypeEnum {
     PS("PS", 3, "需求评审得分");
 
     // rw-任务得分，tx-条线负责人得分，ps-需求评审得分
-    private String name;
-    private String desc;
-    private int code;
+    @Getter
+    private final String name;
+    @Getter
+    private final String desc;
+    @Getter
+    private final int code;
 
     WorkTypeEnum(String name, int code, String desc) {
         this.name = name;

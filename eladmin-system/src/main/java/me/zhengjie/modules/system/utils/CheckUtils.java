@@ -1,4 +1,4 @@
-package me.zhengjie.modules.system;
+package me.zhengjie.modules.system.utils;
 
 import com.alibaba.fastjson.JSON;
 import me.zhengjie.exception.BizException;

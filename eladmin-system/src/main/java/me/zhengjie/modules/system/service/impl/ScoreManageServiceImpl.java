@@ -1,7 +1,7 @@
 package me.zhengjie.modules.system.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import me.zhengjie.modules.system.domain.DevScore;
+import me.zhengjie.modules.system.service.dto.DevScoreDTO;
 import me.zhengjie.modules.system.domain.entity.DevScoreCriteria;
 import me.zhengjie.modules.system.domain.entity.TaskInfoDO;
 import me.zhengjie.modules.system.service.ScoreManageService;
@@ -27,9 +27,9 @@ public class ScoreManageServiceImpl implements ScoreManageService {
     EmployeeManageServiceImpl employeeManageService;
 
     @Override
-    public List<DevScore> queryDevScore(DevScoreCriteria criteria) {
+    public List<DevScoreDTO> queryDevScore(DevScoreCriteria criteria) {
 
-        List<DevScore> devScores = new ArrayList<>();
+        List<DevScoreDTO> devScores = new ArrayList<>();
         int businessLineId = criteria.getBusinessLineId();
         List<Integer> sprintIds = criteria.getSprintIds();
         if (CollectionUtils.isEmpty(sprintIds)) {
@@ -56,13 +56,13 @@ public class ScoreManageServiceImpl implements ScoreManageService {
      *
      * @param taskInfoDOs
      */
-    private List<DevScore> getDevScore(List<TaskInfoDO> taskInfoDOs) {
+    private List<DevScoreDTO> getDevScore(List<TaskInfoDO> taskInfoDOs) {
 
-        HashMap<Integer, DevScore> employeeScoreMap = new HashMap<>();
+        HashMap<Integer, DevScoreDTO> employeeScoreMap = new HashMap<>();
 
         for (TaskInfoDO taskInfoDO : taskInfoDOs) {
             int devEmployeeId = taskInfoDO.getDevEmployeeId();
-            DevScore devScore;
+            DevScoreDTO devScore;
             if (employeeScoreMap.containsKey(devEmployeeId)) {
                 // 更新得分
                 devScore = employeeScoreMap.get(devEmployeeId);
@@ -70,7 +70,7 @@ public class ScoreManageServiceImpl implements ScoreManageService {
                 devScore.setWorkload(newWorkload);
             } else {
                 // 放入得分
-                devScore = new DevScore();
+                devScore = new DevScoreDTO();
                 devScore.setEmployeeId(devEmployeeId);
                 devScore.setEmployeeName(taskInfoDO.getDevEmployeeName());
                 devScore.setWorkload(taskInfoDO.getWorkLoad());
@@ -87,16 +87,16 @@ public class ScoreManageServiceImpl implements ScoreManageService {
      *
      * @param employeeScoreMap
      */
-    private void calWorkLoadPercent(HashMap<Integer, DevScore> employeeScoreMap) {
+    private void calWorkLoadPercent(HashMap<Integer, DevScoreDTO> employeeScoreMap) {
 
         // 计算总workload
         double workloadSum = 0.0;
-        for (Map.Entry<Integer, DevScore> entry : employeeScoreMap.entrySet()) {
+        for (Map.Entry<Integer, DevScoreDTO> entry : employeeScoreMap.entrySet()) {
             workloadSum += entry.getValue().getWorkload();
         }
         // 计算workload百分比
-        for (Map.Entry<Integer, DevScore> entry : employeeScoreMap.entrySet()) {
-            DevScore devScore = entry.getValue();
+        for (Map.Entry<Integer, DevScoreDTO> entry : employeeScoreMap.entrySet()) {
+            DevScoreDTO devScore = entry.getValue();
             BigDecimal workload = BigDecimal.valueOf(devScore.getWorkload());
             BigDecimal workloadPercent = workload.divide(BigDecimal.valueOf(workloadSum), 2, RoundingMode.DOWN);
             devScore.setWorkloadPercent(workloadPercent.doubleValue());
@@ -110,12 +110,12 @@ public class ScoreManageServiceImpl implements ScoreManageService {
      * @param employeeScoreMap
      * @return
      */
-    private List<DevScore> covertMapToList( HashMap<Integer, DevScore> employeeScoreMap) {
+    private List<DevScoreDTO> covertMapToList( HashMap<Integer, DevScoreDTO> employeeScoreMap) {
 
-        List<DevScore> devScores = new ArrayList<>(employeeScoreMap.values());
-        devScores.sort(new Comparator<DevScore>() {
+        List<DevScoreDTO> devScores = new ArrayList<>(employeeScoreMap.values());
+        devScores.sort(new Comparator<DevScoreDTO>() {
             @Override
-            public int compare(DevScore o1, DevScore o2) {
+            public int compare(DevScoreDTO o1, DevScoreDTO o2) {
                 return (int) (o2.getWorkloadPercent() * 100) - (int) (o1.getWorkloadPercent() * 100);
             }
         });

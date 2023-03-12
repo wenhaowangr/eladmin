@@ -1,4 +1,4 @@
-package me.zhengjie.modules.system;
+package me.zhengjie.modules.system.enums;
 
 import lombok.Getter;
 

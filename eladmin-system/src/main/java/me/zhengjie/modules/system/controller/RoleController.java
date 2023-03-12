@@ -1,5 +1,5 @@
 
-package me.zhengjie.modules.system.rest;
+package me.zhengjie.modules.system.controller;
 
 import cn.hutool.core.lang.Dict;
 import io.swagger.annotations.Api;

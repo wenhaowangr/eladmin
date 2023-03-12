@@ -2,7 +2,6 @@
 package me.zhengjie;
 
 import io.swagger.annotations.Api;
-import me.zhengjie.annotation.rest.AnonymousGetMapping;
 import me.zhengjie.utils.SpringContextHolder;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
@@ -15,6 +14,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -51,7 +51,7 @@ public class AppRun {
      *
      * @return /
      */
-    @AnonymousGetMapping("/")
+    @GetMapping("/")
     public String index() {
         return "Backend service started successfully";
     }

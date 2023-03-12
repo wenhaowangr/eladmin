@@ -1,9 +1,9 @@
-package me.zhengjie.modules.system.domain;
+package me.zhengjie.modules.system.service.dto;
 
 import lombok.Data;
 
 @Data
-public class DevScore {
+public class DevScoreDTO {
 
     private Integer employeeId;
     private String employeeName;

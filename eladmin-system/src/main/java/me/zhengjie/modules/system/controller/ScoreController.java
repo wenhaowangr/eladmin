@@ -1,8 +1,8 @@
-package me.zhengjie.modules.system.rest;
+package me.zhengjie.modules.system.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import me.zhengjie.modules.system.domain.DevScore;
+import me.zhengjie.modules.system.service.dto.DevScoreDTO;
 import me.zhengjie.modules.system.domain.entity.DevScoreCriteria;
 import me.zhengjie.modules.system.service.ScoreManageService;
 import org.springframework.http.HttpStatus;
@@ -25,7 +25,7 @@ public class ScoreController {
     @ApiOperation("开发量化得分")
     @GetMapping(value = "/queryDevScore")
     public ResponseEntity<Object> queryTask(@ModelAttribute DevScoreCriteria criteria) {
-        List<DevScore> devScoreList = scoreManageService.queryDevScore(criteria);
+        List<DevScoreDTO> devScoreList = scoreManageService.queryDevScore(criteria);
         return new ResponseEntity<>(devScoreList, HttpStatus.OK);
     }
 

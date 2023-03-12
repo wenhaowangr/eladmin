@@ -3,14 +3,14 @@ package me.zhengjie.modules.system.service.impl;
 import com.google.common.collect.Lists;
 import me.zhengjie.exception.BizException;
 import me.zhengjie.exception.EntityNotFoundException;
-import me.zhengjie.modules.system.CheckUtils;
+import me.zhengjie.modules.system.utils.CheckUtils;
 import me.zhengjie.modules.system.dao.mapper.EmployeeMapper;
 import me.zhengjie.modules.system.dao.mapper.SprintMapper;
 import me.zhengjie.modules.system.domain.User;
 import me.zhengjie.modules.system.domain.entity.EmployeeDO;
 import me.zhengjie.modules.system.domain.entity.SprintDO;
 import me.zhengjie.modules.system.service.vo.SprintManageFilter;
-import me.zhengjie.modules.system.domain.entity.TaskFilter;
+import me.zhengjie.modules.system.service.vo.TaskFilter;
 import me.zhengjie.modules.system.service.SprintManageService;
 import me.zhengjie.modules.system.service.TaskManageService;
 import me.zhengjie.modules.system.service.vo.MyCurTaskVO;
@@ -23,7 +23,7 @@ import org.springframework.util.CollectionUtils;
 import javax.annotation.Resource;
 import java.util.*;
 
-import static me.zhengjie.modules.system.DateUtils.calculateQuarter;
+import static me.zhengjie.modules.system.utils.DateUtils.calculateQuarter;
 
 @Service
 public class SprintManageServiceImpl implements SprintManageService {

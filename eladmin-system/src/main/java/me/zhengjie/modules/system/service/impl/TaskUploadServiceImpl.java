@@ -1,7 +1,7 @@
 package me.zhengjie.modules.system.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import me.zhengjie.modules.system.TaskStateEnum;
+import me.zhengjie.modules.system.enums.TaskStateEnum;
 import me.zhengjie.modules.system.dao.mapper.BusinessLineMapper;
 import me.zhengjie.modules.system.dao.mapper.EmployeeMapper;
 import me.zhengjie.modules.system.dao.mapper.RequirementMapper;

@@ -7,9 +7,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import me.zhengjie.annotation.rest.AnonymousDeleteMapping;
-import me.zhengjie.annotation.rest.AnonymousGetMapping;
-import me.zhengjie.annotation.rest.AnonymousPostMapping;
 import me.zhengjie.config.RsaProperties;
 import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.modules.security.config.bean.LoginCodeEnum;
@@ -57,7 +54,7 @@ public class AuthorizationController {
     private LoginProperties loginProperties;
 
     @ApiOperation("登录授权")
-    @AnonymousPostMapping(value = "/login")
+    @PostMapping(value = "/login")
     public ResponseEntity<Object> login(@Validated @RequestBody AuthUserDto authUser, HttpServletRequest request) throws Exception {
         // 密码解密
         String password = RsaUtils.decryptByPrivateKey(RsaProperties.privateKey, authUser.getPassword());
@@ -102,7 +99,7 @@ public class AuthorizationController {
     }
 
     @ApiOperation("获取验证码")
-    @AnonymousGetMapping(value = "/code")
+    @GetMapping(value = "/code")
     public ResponseEntity<Object> getCode() {
         // 获取运算的结果
         Captcha captcha = loginProperties.getCaptcha();
@@ -123,7 +120,7 @@ public class AuthorizationController {
     }
 
     @ApiOperation("退出登录")
-    @AnonymousDeleteMapping(value = "/logout")
+    @DeleteMapping(value = "/logout")
     public ResponseEntity<Object> logout(HttpServletRequest request) {
         onlineUserService.logout(tokenProvider.getToken(request));
         return new ResponseEntity<>(HttpStatus.OK);

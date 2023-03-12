@@ -1,6 +1,6 @@
 package me.zhengjie.modules.system.service.impl;
 
-import me.zhengjie.modules.system.WorkTypeEnum;
+import me.zhengjie.modules.system.enums.WorkTypeEnum;
 import me.zhengjie.modules.system.dao.mapper.SprintMapper;
 import me.zhengjie.modules.system.dao.mapper.WorkloadMapper;
 import me.zhengjie.modules.system.domain.entity.WorkLoadDO;
